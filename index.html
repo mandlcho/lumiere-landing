@@ -266,30 +266,21 @@
       z-index: -1;
     }
 
-    /* ── Footer ── */
-    .site-footer {
-      position: relative;
-      z-index: 2;
-      background: #000;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 3rem 1.25rem 2rem;
-      text-align: center;
+    /* ── Footer reveal (inside last video section) ── */
+    .footer-reveal {
+      z-index: 3;
     }
 
-    .footer-inner {
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    .footer-logo {
+    .footer-reveal .footer-logo {
       font-family: 'Playfair Display', Georgia, serif;
       font-size: 1.2rem;
       font-style: italic;
       font-weight: 400;
       letter-spacing: 0.02em;
+      display: block;
     }
 
-    .footer-tagline {
+    .footer-reveal .footer-tagline {
       font-family: 'Inter', sans-serif;
       font-size: 0.7rem;
       letter-spacing: 0.1em;
@@ -298,7 +289,7 @@
       margin-top: 0.4rem;
     }
 
-    .footer-links {
+    .footer-reveal .footer-links {
       display: flex;
       justify-content: center;
       gap: 2rem;
@@ -317,6 +308,7 @@
       color: rgba(255, 255, 255, 0.6);
       text-decoration: none;
       transition: color 0.2s ease;
+      pointer-events: auto;
     }
 
     .footer-social:hover {
@@ -568,9 +560,9 @@
         <div class="inner">
           <h2>Our Process</h2>
           <p>
-            From staging to cinematic walkthroughs, we deliver production-quality visuals
-            at a fraction of the time and cost.
-            Every listing comes to life — tailored to your audience, indistinguishable from the real thing.
+            From staging to cinematic walkthroughs, every detail is bespoke —
+            thoughtfully crafted and designed around your listing.
+            Nothing templated, nothing generic. Each space gets the attention it deserves.
           </p>
         </div>
       </div>
@@ -615,29 +607,25 @@
         <h2>Ready to Transform Your Listings?</h2>
         <p><a href="#" class="cta-button">Get Started</a></p>
       </div>
+      <div class="video-content footer-reveal" data-phase="footer">
+        <div class="inner">
+          <span class="footer-logo">LumiereMotionLabs</span>
+          <p class="footer-tagline">Cinematic real estate visualization</p>
+          <div class="footer-links">
+            <a href="https://instagram.com/lumiere.motionlab" target="_blank" rel="noopener" class="footer-social">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+              Instagram
+            </a>
+            <a href="mailto:hello@lumieremotionlabs.com" class="footer-social">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,4 12,13 2,4"/></svg>
+              Contact
+            </a>
+          </div>
+          <p class="footer-copy">&copy; 2026 LumiereMotionLabs. All rights reserved.</p>
+        </div>
+      </div>
     </div>
   </div>
-
-  <!-- ── Footer ── -->
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <div class="footer-brand">
-        <span class="footer-logo">LumiereMotionLabs</span>
-        <p class="footer-tagline">Cinematic real estate visualization</p>
-      </div>
-      <div class="footer-links">
-        <a href="https://instagram.com/lumieremotionlabs" target="_blank" rel="noopener" class="footer-social">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
-          Instagram
-        </a>
-        <a href="mailto:hello@lumieremotionlabs.com" class="footer-social">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,4 12,13 2,4"/></svg>
-          Contact
-        </a>
-      </div>
-      <p class="footer-copy">&copy; 2026 LumiereMotionLabs. All rights reserved.</p>
-    </div>
-  </footer>
 
   <script>
     (function () {
@@ -662,6 +650,9 @@
       var targetOpacityPrimary = new Map();
       var targetOpacitySecondary = new Map();
       var targetFadeBlack = new Map();
+      var targetOpacityFooter = new Map();
+      var targetParallaxFooter = new Map();
+      var parallaxFooter = new Map();
 
       var sectionLayouts = [];
 
@@ -772,6 +763,7 @@
             overlay: section.querySelector('.video-overlay'),
             primaryText: section.querySelector('[data-phase="primary"]'),
             secondaryText: section.querySelector('[data-phase="secondary"]'),
+            footerText: section.querySelector('[data-phase="footer"]'),
             top: scrollTop + rect.top,
             height: section.offsetHeight - window.innerHeight,
             nearViewport: true
@@ -866,6 +858,20 @@
             fadeBlack = Math.max(fadeBlack, inFade);
           }
           targetFadeBlack.set(layout.section, fadeBlack);
+
+          // ── Footer reveal: last section only, appears during fade-to-black ──
+          var footerOpacity = 0;
+          if (layout.footerText && i === sectionLayouts.length - 1) {
+            // Fade in 78-88%, stay visible through end
+            if (rawProgress >= 0.78 && rawProgress < 0.88) {
+              footerOpacity = (rawProgress - 0.78) / 0.10;
+            } else if (rawProgress >= 0.88) {
+              footerOpacity = 1;
+            }
+          }
+          targetOpacityFooter.set(layout.section, footerOpacity);
+          // Slide up from 30px below to center
+          targetParallaxFooter.set(layout.section, (1 - footerOpacity) * 30);
         }
       }
 
@@ -933,6 +939,21 @@
 
             layout.secondaryText.style.opacity = osVal;
             layout.secondaryText.style.transform = 'translate3d(0,' + (-psNext) + 'px,0)';
+          }
+
+          // Apply footer reveal — opacity direct, slide up lerped
+          if (layout.footerText) {
+            var ofVal = targetOpacityFooter.get(layout.section) || 0;
+
+            var pfTarget = targetParallaxFooter.get(layout.section) || 30;
+            var pfCurrent = parallaxFooter.get(layout.section) || 30;
+            var pfNext = lerp(pfCurrent, pfTarget, LERP_FACTOR_TEXT);
+            if (Math.abs(pfNext - pfTarget) < 0.5) pfNext = pfTarget;
+            else stillMoving = true;
+            parallaxFooter.set(layout.section, pfNext);
+
+            layout.footerText.style.opacity = ofVal;
+            layout.footerText.style.transform = 'translate3d(0,' + pfNext + 'px,0)';
           }
 
           // Apply fade-to-black directly (no lerp — must be precise before unstick)
