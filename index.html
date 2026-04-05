@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>LumiereMotionLabs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ═══════════════════════════════════════════
+       MOBILE-FIRST BASE STYLES
+       All base styles target phones (< 560px).
+       Larger screens scale up via min-width queries.
+       ═══════════════════════════════════════════ */
+
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      scroll-behavior: auto;
+      /* Prevent overscroll bounce on iOS */
+      overscroll-behavior: none;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-weight: 300;
+      color: #fff;
+      background: #000;
+      overflow-x: hidden;
+      /* Smooth scrolling momentum on iOS */
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* ── Scroll progress ── */
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #fff, rgba(255,255,255,0.5));
+      z-index: 100;
+      width: 0%;
+      will-change: width;
+    }
+
+    /* ── Video Section Block ──
+       Each .video-section is a tall scrollable area.
+       The video inside is sticky so it stays visible while
+       the section scrolls, and JS maps scroll progress to
+       video.currentTime.
+    */
+    .video-section {
+      position: relative;
+      /* Shorter on mobile for snappier scroll-through */
+      height: 250vh;
+    }
+
+    .video-sticky {
+      position: sticky;
+      top: 0;
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+    }
+
+    .video-sticky video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      will-change: contents;
+    }
+
+    .video-overlay {
+      position: absolute;
+      inset: 0;
+      /* Stronger overlay on mobile for text legibility */
+      background: rgba(0, 0, 0, 0.45);
+      pointer-events: none;
+    }
+
+    /* Text overlay inside the sticky frame */
+    .video-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      /* Generous mobile padding + safe area for notched phones */
+      padding: 1.5rem 1.25rem;
+      padding-top: max(1.5rem, env(safe-area-inset-top));
+      padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+      z-index: 2;
+      will-change: transform;
+    }
+
+    .video-text h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      /* Mobile-first: smaller base, scales up */
+      font-size: 2.4rem;
+      font-weight: 400;
+      font-style: italic;
+      letter-spacing: 0.01em;
+      line-height: 1.08;
+      text-shadow: 0 2px 40px rgba(0,0,0,0.8);
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .video-text p {
+      margin-top: 1rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 300;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      max-width: 90vw;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      text-shadow: 0 1px 20px rgba(0,0,0,0.6);
+    }
+
+    .video-section.active .video-text h2,
+    .video-section.active .video-text p {
+      opacity: 1;
+    }
+
+    /* ── Hero (first section) ── */
+    .hero-text h2 {
+      font-size: 2.8rem;
+      font-style: italic;
+      font-weight: 400;
+      letter-spacing: 0.01em;
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: max(2rem, calc(env(safe-area-inset-bottom) + 1.5rem));
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      opacity: 0.5;
+      animation: pulse 2s ease-in-out infinite;
+      z-index: 2;
+      white-space: nowrap;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.6; transform: translateX(-50%) translateY(0); }
+      50% { opacity: 1; transform: translateX(-50%) translateY(6px); }
+    }
+
+    /* ── Content interstitial sections ── */
+    .content-section {
+      position: relative;
+      z-index: 2;
+      min-height: 50vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      /* Tighter mobile padding */
+      padding: 3rem 1.25rem;
+      text-align: center;
+      background: #000;
+    }
+
+    .content-section .inner {
+      max-width: 800px;
+      width: 100%;
+    }
+
+    .content-section h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.8rem;
+      font-weight: 400;
+      font-style: italic;
+      margin-bottom: 1rem;
+      letter-spacing: 0.01em;
+    }
+
+    .content-section p {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem;
+      line-height: 1.75;
+      opacity: 0.75;
+      font-weight: 300;
+      letter-spacing: 0.03em;
+    }
+
+    /* Features grid — single column on mobile */
+    .features {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.875rem;
+      margin-top: 1.5rem;
+      width: 100%;
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      padding: 1.5rem 1.25rem;
+      text-align: left;
+      transition: transform 0.3s ease, background 0.3s ease;
+    }
+
+    .feature-card h3 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+      font-weight: 400;
+      font-style: italic;
+      letter-spacing: 0.01em;
+    }
+
+    .feature-card p {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.82rem;
+      line-height: 1.65;
+      opacity: 0.65;
+      font-weight: 300;
+      letter-spacing: 0.02em;
+    }
+
+    /* CTA button — min 48px touch target (WCAG) */
+    .cta-button {
+      display: inline-block;
+      margin-top: 1.5rem;
+      padding: 0.9rem 2.5rem;
+      min-height: 48px;
+      min-width: 48px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #000;
+      background: #fff;
+      border: none;
+      border-radius: 2px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    /* Active state for touch — immediate feedback */
+    .cta-button:active {
+      transform: scale(0.95);
+      opacity: 0.85;
+    }
+
+    /* Fade-in for content sections */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── "No video" fallback ── */
+    .video-sticky::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #111 0%, #000 100%);
+      z-index: -1;
+    }
+
+    /* ═══════════════════════════════════════════
+       TABLET AND UP (>= 560px)
+       ═══════════════════════════════════════════ */
+    @media (min-width: 560px) {
+      .video-section {
+        height: 280vh;
+      }
+
+      .video-overlay {
+        background: rgba(0, 0, 0, 0.38);
+      }
+
+      .video-text {
+        padding: 2rem;
+        padding-top: max(2rem, env(safe-area-inset-top));
+        padding-bottom: max(2rem, env(safe-area-inset-bottom));
+      }
+
+      .video-text h2 {
+        font-size: clamp(2.6rem, 7vw, 5rem);
+      }
+
+      .video-text p {
+        font-size: clamp(0.75rem, 2vw, 1rem);
+        max-width: 480px;
+      }
+
+      .hero-text h2 {
+        font-size: clamp(3rem, 9vw, 6rem);
+      }
+
+      .content-section {
+        min-height: 55vh;
+        padding: 4rem 2rem;
+      }
+
+      .content-section h2 {
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        margin-bottom: 1.25rem;
+      }
+
+      .content-section p {
+        font-size: clamp(0.9rem, 1.8vw, 1.05rem);
+        line-height: 1.8;
+      }
+
+      .features {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1.25rem;
+        margin-top: 2rem;
+      }
+
+      .feature-card {
+        padding: 1.75rem 1.25rem;
+        border-radius: 16px;
+      }
+
+      .feature-card h3 {
+        font-size: 1.35rem;
+      }
+    }
+
+    /* ═══════════════════════════════════════════
+       DESKTOP (>= 900px)
+       ═══════════════════════════════════════════ */
+    @media (min-width: 900px) {
+      .video-section {
+        height: 300vh;
+      }
+
+      .video-overlay {
+        background: rgba(0, 0, 0, 0.35);
+      }
+
+      .video-text h2 {
+        font-size: clamp(3rem, 8vw, 7rem);
+      }
+
+      .video-text p {
+        font-size: clamp(0.8rem, 2.5vw, 1.15rem);
+        max-width: 520px;
+      }
+
+      .hero-text h2 {
+        font-size: clamp(3.5rem, 11vw, 9rem);
+      }
+
+      .content-section {
+        min-height: 60vh;
+        padding: 5rem 1.5rem;
+      }
+
+      .content-section h2 {
+        font-size: clamp(2.5rem, 6vw, 4rem);
+      }
+
+      .content-section p {
+        font-size: clamp(0.95rem, 2vw, 1.1rem);
+      }
+
+      .features {
+        gap: 2rem;
+        max-width: 900px;
+      }
+
+      .feature-card h3 {
+        font-size: 1.4rem;
+      }
+
+      /* Hover effects only on pointer devices */
+      @media (hover: hover) {
+        .feature-card:hover {
+          transform: translateY(-4px);
+          background: rgba(255, 255, 255, 0.1);
+        }
+
+        .cta-button:hover {
+          transform: scale(1.03);
+          box-shadow: 0 8px 40px rgba(255, 255, 255, 0.2);
+        }
+      }
+    }
+
+    /* ═══════════════════════════════════════════
+       LANDSCAPE MOBILE (short + wide)
+       ═══════════════════════════════════════════ */
+    @media (max-height: 500px) and (orientation: landscape) {
+      .video-text h2 {
+        font-size: 1.8rem;
+      }
+
+      .video-text p {
+        font-size: 0.65rem;
+        margin-top: 0.5rem;
+      }
+
+      .scroll-hint {
+        bottom: 0.75rem;
+        font-size: 0.5rem;
+      }
+
+      .content-section {
+        min-height: 80vh;
+        padding: 2rem 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="scroll-progress" id="scrollProgress"></div>
+
+  <!-- ╔══════════════════════════════════════════╗
+       ║  SECTION 1 — Hero / Intro video          ║
+       ╚══════════════════════════════════════════╝ -->
+  <div class="video-section" data-video-section>
+    <div class="video-sticky">
+      <video muted playsinline webkit-playsinline preload="metadata" data-scroll-video>
+        <source src="background.mp4" type="video/mp4">
+      </video>
+      <div class="video-overlay"></div>
+      <div class="video-text hero-text">
+        <h2>Reimagine<br>Every Space</h2>
+        <p>AI-powered visualization that transforms real estate into cinematic experiences</p>
+      </div>
+      <span class="scroll-hint">Scroll to explore</span>
+    </div>
+  </div>
+
+  <!-- Interstitial content -->
+  <section class="content-section fade-in">
+    <div class="inner">
+      <h2>Cinematic Real Estate</h2>
+      <p>
+        We blend cutting-edge AI with professional cinematography to create
+        immersive property experiences. Every scroll reveals a new perspective,
+        every frame tells a story about the space you're about to call home.
+      </p>
+    </div>
+  </section>
+
+  <!-- ╔══════════════════════════════════════════╗
+       ║  SECTION 2 — Showcase video               ║
+       ╚══════════════════════════════════════════╝ -->
+  <div class="video-section" data-video-section>
+    <div class="video-sticky">
+      <video muted playsinline webkit-playsinline preload="metadata" data-scroll-video>
+        <source src="staging.mp4" type="video/mp4">
+      </video>
+      <div class="video-overlay"></div>
+      <div class="video-text">
+        <h2>Room Restyling</h2>
+        <p>Transform any room with AI-generated interior designs that feel real and aspirational.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interstitial content -->
+  <section class="content-section fade-in">
+    <div class="inner">
+      <h2>What We Do</h2>
+      <div class="features">
+        <div class="feature-card">
+          <h3>Virtual Staging</h3>
+          <p>Furnish empty rooms in seconds with photorealistic AI-generated interiors.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Video Walkthroughs</h3>
+          <p>Smooth, scroll-driven video tours that put the viewer in control of their experience.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Day-to-Night</h3>
+          <p>See properties transition through different times of day with a single scroll.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ╔══════════════════════════════════════════╗
+       ║  SECTION 3 — Tech / Vision video          ║
+       ╚══════════════════════════════════════════╝ -->
+  <div class="video-section" data-video-section>
+    <div class="video-sticky">
+      <video muted playsinline webkit-playsinline preload="metadata" data-scroll-video>
+        <source src="background.mp4" type="video/mp4">
+      </video>
+      <div class="video-overlay"></div>
+      <div class="video-text">
+        <h2>Built for the Future</h2>
+        <p>High-fidelity visualizations in minutes, not days. Technology that adapts to your brand.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interstitial content -->
+  <section class="content-section fade-in">
+    <div class="inner">
+      <h2>Our Pipeline</h2>
+      <p>
+        From staging to cinematic walkthroughs, our AI-native pipeline generates
+        production-quality visuals at a fraction of the time and cost.
+        Every listing comes to life — tailored to your audience.
+      </p>
+    </div>
+  </section>
+
+  <!-- ╔══════════════════════════════════════════╗
+       ║  SECTION 4 — CTA video                    ║
+       ╚══════════════════════════════════════════╝ -->
+  <div class="video-section" data-video-section style="height: 200vh;">
+    <div class="video-sticky">
+      <video muted playsinline webkit-playsinline preload="metadata" data-scroll-video>
+        <source src="background.mp4" type="video/mp4">
+      </video>
+      <div class="video-overlay"></div>
+      <div class="video-text">
+        <h2>Ready to Transform Your Listings?</h2>
+        <p><a href="#" class="cta-button">Get Started</a></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      var progressBar = document.getElementById('scrollProgress');
+      var videoSections = document.querySelectorAll('[data-video-section]');
+      var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+      // Pause all videos immediately
+      videoSections.forEach(function (section) {
+        var video = section.querySelector('[data-scroll-video]');
+        video.pause();
+      });
+
+      // ── iOS / Mobile video priming ──
+      // On iOS, video.currentTime cannot be set until user interaction.
+      // We need a play/pause cycle to unlock frame seeking.
+      var videosReady = false;
+      function primeVideos() {
+        if (videosReady) return;
+        videosReady = true;
+        videoSections.forEach(function (section) {
+          var video = section.querySelector('[data-scroll-video]');
+          video.load();
+          var p = video.play();
+          if (p !== undefined) {
+            p.then(function () {
+              video.pause();
+              video.currentTime = 0;
+            }).catch(function () {
+              // Autoplay blocked — try again on next user gesture
+              videosReady = false;
+            });
+          }
+        });
+      }
+
+      // Fire on first touch (iOS) or first scroll (desktop)
+      document.addEventListener('touchstart', primeVideos, { once: true, passive: true });
+      document.addEventListener('scroll', primeVideos, { once: true, passive: true });
+      // Also prime on click for devices that block touchstart autoplay
+      document.addEventListener('click', primeVideos, { once: true, passive: true });
+
+      // ── Scroll handler ──
+      // Use a time-based throttle on mobile for smoother 60fps-targeted updates
+      var lastScrollTime = 0;
+      var MOBILE_THROTTLE_MS = 16; // ~60fps
+
+      function onScroll() {
+        var scrollTop = window.scrollY || window.pageYOffset;
+        var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+
+        // Global progress bar
+        progressBar.style.width = (docHeight > 0 ? (scrollTop / docHeight) * 100 : 0) + '%';
+
+        // Per-section video scrubbing + parallax text
+        videoSections.forEach(function (section) {
+          var video = section.querySelector('[data-scroll-video]');
+          var textEl = section.querySelector('.video-text');
+          if (!video.duration || !isFinite(video.duration)) return;
+
+          var rect = section.getBoundingClientRect();
+          var sectionTop = scrollTop + rect.top;
+          var sectionHeight = section.offsetHeight - window.innerHeight;
+
+          // How far through this section (0 → 1)
+          var rawProgress = (scrollTop - sectionTop) / sectionHeight;
+          var progress = Math.min(Math.max(rawProgress, 0), 1);
+
+          // 2x video speed: video completes when user is halfway through section
+          var videoProgress = Math.min(progress * 2, 1);
+          var targetTime = videoProgress * video.duration;
+
+          // Only seek if difference is meaningful (reduces mobile jank)
+          if (Math.abs(video.currentTime - targetTime) > 0.03) {
+            video.currentTime = targetTime;
+          }
+
+          // Parallax: text scrolls upward as user scrolls through section
+          // Reduced parallax intensity on mobile for smoother feel
+          if (textEl) {
+            var parallaxFactor = isMobile ? 0.25 : 0.4;
+            var parallaxOffset = progress * window.innerHeight * parallaxFactor;
+            textEl.style.transform = 'translateY(' + (-parallaxOffset) + 'px)';
+          }
+
+          // Toggle active class for text reveal
+          var inView = rawProgress >= -0.1 && rawProgress <= 1.1;
+          section.classList.toggle('active', inView);
+        });
+      }
+
+      // rAF-based scroll handler with mobile throttle
+      var ticking = false;
+      window.addEventListener('scroll', function () {
+        if (!ticking) {
+          requestAnimationFrame(function () {
+            if (isMobile) {
+              var now = performance.now();
+              if (now - lastScrollTime >= MOBILE_THROTTLE_MS) {
+                onScroll();
+                lastScrollTime = now;
+              }
+            } else {
+              onScroll();
+            }
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }, { passive: true });
+
+      // Run once on load
+      window.addEventListener('load', onScroll);
+
+      // Re-calculate on resize/orientation change (important for mobile)
+      var resizeTimer;
+      window.addEventListener('resize', function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(onScroll, 150);
+      }, { passive: true });
+
+      // Intersection Observer for fade-in content sections
+      // Lower threshold on mobile (less visible area)
+      var threshold = window.innerWidth < 560 ? 0.06 : 0.15;
+      var observer = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+            }
+          });
+        },
+        { threshold: threshold }
+      );
+      document.querySelectorAll('.fade-in').forEach(function (el) {
+        observer.observe(el);
+      });
+    })();
+  </script>
+
+</body>
+</html>
