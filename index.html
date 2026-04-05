@@ -10,8 +10,6 @@
   <style>
     /* ═══════════════════════════════════════════
        MOBILE-FIRST BASE STYLES
-       All base styles target phones (< 560px).
-       Larger screens scale up via min-width queries.
        ═══════════════════════════════════════════ */
 
     *, *::before, *::after {
@@ -23,7 +21,6 @@
 
     html {
       scroll-behavior: smooth;
-      /* Prevent overscroll bounce on iOS */
       overscroll-behavior: none;
     }
 
@@ -33,7 +30,6 @@
       color: #fff;
       background: #000;
       overflow-x: hidden;
-      /* Smooth scrolling momentum on iOS */
       -webkit-overflow-scrolling: touch;
     }
 
@@ -51,16 +47,14 @@
       will-change: transform;
     }
 
-    /* ── Video Section Block ──
-       Each .video-section is a tall scrollable area.
-       The video inside is sticky so it stays visible while
-       the section scrolls, and JS maps scroll progress to
-       video.currentTime.
-    */
+    /* ── Video Section Block ── */
     .video-section {
       position: relative;
-      /* Shorter on mobile for snappier scroll-through */
-      height: 250vh;
+      height: 350vh;
+    }
+
+    .video-section:last-of-type {
+      height: 200vh;
     }
 
     .video-sticky {
@@ -70,6 +64,7 @@
       height: 100vh;
       height: 100dvh;
       overflow: hidden;
+      background: #000;
     }
 
     .video-sticky video {
@@ -77,21 +72,17 @@
       height: 100%;
       object-fit: cover;
       display: block;
-      /* Source videos are 1080×1920 (portrait); on wide screens object-fit:cover
-         upscales ~1.8×, causing visible quality loss. Desktop media queries
-         below apply a sub-pixel blur to smooth the upscaling artifacts.
-         Long-term fix: provide landscape (≥1920×1080) source videos. */
+      will-change: filter;
     }
 
     .video-overlay {
       position: absolute;
       inset: 0;
-      /* Stronger overlay on mobile for text legibility */
       background: rgba(0, 0, 0, 0.45);
       pointer-events: none;
     }
 
-    /* Text overlay inside the sticky frame */
+    /* ── Primary text overlay (heading + subtitle) ── */
     .video-text {
       position: absolute;
       inset: 0;
@@ -100,25 +91,22 @@
       justify-content: center;
       align-items: center;
       text-align: center;
-      /* Generous mobile padding + safe area for notched phones */
       padding: 1.5rem 1.25rem;
       padding-top: max(1.5rem, env(safe-area-inset-top));
       padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
       z-index: 2;
-      will-change: transform;
+      will-change: transform, opacity;
+      opacity: 0;
     }
 
     .video-text h2 {
       font-family: 'Playfair Display', Georgia, serif;
-      /* Mobile-first: smaller base, scales up */
       font-size: 2.4rem;
       font-weight: 400;
       font-style: italic;
       letter-spacing: 0.01em;
       line-height: 1.08;
       text-shadow: 0 2px 40px rgba(0,0,0,0.8);
-      opacity: 0;
-      will-change: opacity;
     }
 
     .video-text p {
@@ -129,12 +117,55 @@
       letter-spacing: 0.12em;
       text-transform: uppercase;
       max-width: 90vw;
-      opacity: 0;
       text-shadow: 0 1px 20px rgba(0,0,0,0.6);
-      will-change: opacity;
+    }
+
+    /* ── Secondary content overlay (merged interstitial) ── */
+    .video-content {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 1.5rem 1.25rem;
+      z-index: 2;
+      will-change: transform, opacity;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .video-content .inner {
+      max-width: 800px;
+      width: 100%;
+    }
+
+    .video-content h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.8rem;
+      font-weight: 400;
+      font-style: italic;
+      margin-bottom: 1rem;
+      letter-spacing: 0.01em;
+      text-shadow: 0 2px 30px rgba(0,0,0,0.8);
+    }
+
+    .video-content p {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      line-height: 1.75;
+      opacity: 0.85;
+      font-weight: 300;
+      letter-spacing: 0.03em;
+      text-shadow: 0 1px 20px rgba(0,0,0,0.6);
     }
 
     /* ── Hero (first section) ── */
+    .hero-text {
+      opacity: 1;
+    }
+
     .hero-text h2 {
       font-size: 2.8rem;
       font-style: italic;
@@ -162,45 +193,7 @@
       50% { opacity: 1; transform: translateX(-50%) translateY(6px); }
     }
 
-    /* ── Content interstitial sections ── */
-    .content-section {
-      position: relative;
-      z-index: 2;
-      min-height: 50vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      /* Tighter mobile padding */
-      padding: 3rem 1.25rem;
-      text-align: center;
-      background: #000;
-    }
-
-    .content-section .inner {
-      max-width: 800px;
-      width: 100%;
-    }
-
-    .content-section h2 {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 1.8rem;
-      font-weight: 400;
-      font-style: italic;
-      margin-bottom: 1rem;
-      letter-spacing: 0.01em;
-    }
-
-    .content-section p {
-      font-family: 'Inter', sans-serif;
-      font-size: 0.88rem;
-      line-height: 1.75;
-      opacity: 0.75;
-      font-weight: 300;
-      letter-spacing: 0.03em;
-    }
-
-    /* Features grid — single column on mobile */
+    /* ── Feature cards ── */
     .features {
       display: grid;
       grid-template-columns: 1fr;
@@ -210,12 +203,13 @@
     }
 
     .feature-card {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 14px;
       padding: 1.5rem 1.25rem;
       text-align: left;
-      transition: transform 0.3s ease, background 0.3s ease;
     }
 
     .feature-card h3 {
@@ -231,12 +225,12 @@
       font-family: 'Inter', sans-serif;
       font-size: 0.82rem;
       line-height: 1.65;
-      opacity: 0.65;
+      opacity: 0.7;
       font-weight: 300;
       letter-spacing: 0.02em;
     }
 
-    /* CTA button — min 48px touch target (WCAG) */
+    /* ── CTA button ── */
     .cta-button {
       display: inline-block;
       margin-top: 1.5rem;
@@ -255,25 +249,12 @@
       cursor: pointer;
       text-decoration: none;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
+      pointer-events: auto;
     }
 
-    /* Active state for touch — immediate feedback */
     .cta-button:active {
       transform: scale(0.95);
       opacity: 0.85;
-    }
-
-    /* Fade-in for content sections */
-    .fade-in {
-      opacity: 0;
-      transform: translate3d(0, 16px, 0);
-      transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
-      will-change: opacity, transform;
-    }
-
-    .fade-in.visible {
-      opacity: 1;
-      transform: translate3d(0, 0, 0);
     }
 
     /* ── "No video" fallback ── */
@@ -285,12 +266,80 @@
       z-index: -1;
     }
 
+    /* ── Footer ── */
+    .site-footer {
+      position: relative;
+      z-index: 2;
+      background: #000;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 3rem 1.25rem 2rem;
+      text-align: center;
+    }
+
+    .footer-inner {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .footer-logo {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.2rem;
+      font-style: italic;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+    }
+
+    .footer-tagline {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.4;
+      margin-top: 0.4rem;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin: 1.5rem 0;
+    }
+
+    .footer-social {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 300;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .footer-social:hover {
+      color: #fff;
+    }
+
+    .footer-copy {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      opacity: 0.25;
+    }
+
     /* ═══════════════════════════════════════════
        TABLET AND UP (>= 560px)
        ═══════════════════════════════════════════ */
     @media (min-width: 560px) {
       .video-section {
-        height: 280vh;
+        height: 400vh;
+      }
+
+      .video-section:last-of-type {
+        height: 200vh;
       }
 
       .video-overlay {
@@ -316,17 +365,12 @@
         font-size: clamp(3rem, 9vw, 6rem);
       }
 
-      .content-section {
-        min-height: 55vh;
-        padding: 4rem 2rem;
-      }
-
-      .content-section h2 {
+      .video-content h2 {
         font-size: clamp(2rem, 5vw, 3.5rem);
         margin-bottom: 1.25rem;
       }
 
-      .content-section p {
+      .video-content p {
         font-size: clamp(0.9rem, 1.8vw, 1.05rem);
         line-height: 1.8;
       }
@@ -347,21 +391,22 @@
       }
     }
 
-    /* ═══════════════════════════════════════════
+    /* ════════════════════════════════════════���══
        DESKTOP (>= 900px)
        ═══════════════════════════════════════════ */
     @media (min-width: 900px) {
       .video-section {
-        height: 300vh;
+        height: 450vh;
+      }
+
+      .video-section:last-of-type {
+        height: 220vh;
       }
 
       .video-overlay {
         background: rgba(0, 0, 0, 0.35);
       }
 
-      /* Soften upscaling artifacts: portrait 1080p video stretched to ≥900px
-         landscape viewport. Sub-pixel blur smooths interpolation without
-         noticeably softening the image. Scale compensates for blur edge. */
       .video-sticky video {
         filter: blur(0.4px);
         transform: scale(1.01);
@@ -380,16 +425,11 @@
         font-size: clamp(3.5rem, 11vw, 9rem);
       }
 
-      .content-section {
-        min-height: 60vh;
-        padding: 5rem 1.5rem;
-      }
-
-      .content-section h2 {
+      .video-content h2 {
         font-size: clamp(2.5rem, 6vw, 4rem);
       }
 
-      .content-section p {
+      .video-content p {
         font-size: clamp(0.95rem, 2vw, 1.1rem);
       }
 
@@ -402,11 +442,10 @@
         font-size: 1.4rem;
       }
 
-      /* Hover effects only on pointer devices */
       @media (hover: hover) {
         .feature-card:hover {
           transform: translateY(-4px);
-          background: rgba(255, 255, 255, 0.1);
+          background: rgba(255, 255, 255, 0.14);
         }
 
         .cta-button:hover {
@@ -418,7 +457,6 @@
 
     /* ═══════════════════════════════════════════
        EXTRA-WIDE DESKTOP (>= 1440px)
-       Portrait 1080p video upscaled >1.33× — stronger smoothing.
        ═══════════════════════════════════════════ */
     @media (min-width: 1440px) {
       .video-sticky video {
@@ -444,11 +482,6 @@
         bottom: 0.75rem;
         font-size: 0.5rem;
       }
-
-      .content-section {
-        min-height: 80vh;
-        padding: 2rem 1.5rem;
-      }
     }
   </style>
 </head>
@@ -457,36 +490,34 @@
   <div class="scroll-progress" id="scrollProgress"></div>
 
   <!-- ╔══════════════════════════════════════════╗
-       ║  SECTION 1 — Hero / Intro video          ║
+       ║  SECTION 1 — Hero                        ║
        ╚══════════════════════════════════════════╝ -->
   <div class="video-section" data-video-section>
     <div class="video-sticky">
-      <video muted playsinline webkit-playsinline preload="metadata" data-scroll-video>
+      <video muted playsinline webkit-playsinline preload="auto" data-scroll-video>
         <source src="lighttopss.mp4" type="video/mp4">
       </video>
       <div class="video-overlay"></div>
-      <div class="video-text hero-text">
+      <div class="video-text hero-text" data-phase="primary">
         <h2>Reimagine<br>Every Space</h2>
         <p>AI-powered visualization that transforms real estate into cinematic experiences</p>
+      </div>
+      <div class="video-content" data-phase="secondary">
+        <div class="inner">
+          <h2>Cinematic Real Estate</h2>
+          <p>
+            We blend cutting-edge AI with professional cinematography to create
+            immersive property experiences. Every scroll reveals a new perspective,
+            every frame tells a story about the space you're about to call home.
+          </p>
+        </div>
       </div>
       <span class="scroll-hint">Scroll to explore</span>
     </div>
   </div>
 
-  <!-- Interstitial content -->
-  <section class="content-section fade-in">
-    <div class="inner">
-      <h2>Cinematic Real Estate</h2>
-      <p>
-        We blend cutting-edge AI with professional cinematography to create
-        immersive property experiences. Every scroll reveals a new perspective,
-        every frame tells a story about the space you're about to call home.
-      </p>
-    </div>
-  </section>
-
   <!-- ╔══════════════════════════════════════════╗
-       ║  SECTION 2 — Showcase video               ║
+       ║  SECTION 2 — Staging                      ║
        ╚══════════════════════════════════════════╝ -->
   <div class="video-section" data-video-section>
     <div class="video-sticky">
@@ -494,36 +525,34 @@
         <source src="staging.mp4" type="video/mp4">
       </video>
       <div class="video-overlay"></div>
-      <div class="video-text">
+      <div class="video-text" data-phase="primary">
         <h2>Room Restyling</h2>
         <p>Transform any room with AI-generated interior designs that feel real and aspirational.</p>
+      </div>
+      <div class="video-content" data-phase="secondary">
+        <div class="inner">
+          <h2>What We Do</h2>
+          <div class="features">
+            <div class="feature-card">
+              <h3>Virtual Staging</h3>
+              <p>Furnish empty rooms in seconds with photorealistic AI-generated interiors.</p>
+            </div>
+            <div class="feature-card">
+              <h3>Video Walkthroughs</h3>
+              <p>Smooth, scroll-driven video tours that put the viewer in control of their experience.</p>
+            </div>
+            <div class="feature-card">
+              <h3>Day-to-Night</h3>
+              <p>See properties transition through different times of day with a single scroll.</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Interstitial content -->
-  <section class="content-section fade-in">
-    <div class="inner">
-      <h2>What We Do</h2>
-      <div class="features">
-        <div class="feature-card">
-          <h3>Virtual Staging</h3>
-          <p>Furnish empty rooms in seconds with photorealistic AI-generated interiors.</p>
-        </div>
-        <div class="feature-card">
-          <h3>Video Walkthroughs</h3>
-          <p>Smooth, scroll-driven video tours that put the viewer in control of their experience.</p>
-        </div>
-        <div class="feature-card">
-          <h3>Day-to-Night</h3>
-          <p>See properties transition through different times of day with a single scroll.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- ╔══════════════════════════════════════════╗
-       ║  SECTION 3 — Office Transform video        ║
+       ║  SECTION 3 — Office Transform             ║
        ╚══════════════════════════════════════════╝ -->
   <div class="video-section" data-video-section>
     <div class="video-sticky">
@@ -531,27 +560,25 @@
         <source src="transform_office.mp4" type="video/mp4">
       </video>
       <div class="video-overlay"></div>
-      <div class="video-text">
+      <div class="video-text" data-phase="primary">
         <h2>Built for the Future</h2>
         <p>High-fidelity visualizations in minutes, not days. Technology that adapts to your brand.</p>
+      </div>
+      <div class="video-content" data-phase="secondary">
+        <div class="inner">
+          <h2>Our Pipeline</h2>
+          <p>
+            From staging to cinematic walkthroughs, our AI-native pipeline generates
+            production-quality visuals at a fraction of the time and cost.
+            Every listing comes to life — tailored to your audience.
+          </p>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Interstitial content -->
-  <section class="content-section fade-in">
-    <div class="inner">
-      <h2>Our Pipeline</h2>
-      <p>
-        From staging to cinematic walkthroughs, our AI-native pipeline generates
-        production-quality visuals at a fraction of the time and cost.
-        Every listing comes to life — tailored to your audience.
-      </p>
-    </div>
-  </section>
-
   <!-- ╔══════════════════════════════════════════╗
-       ║  SECTION 4 — Lights video                  ║
+       ║  SECTION 4 — Lights                       ║
        ╚══════════════════════════════════════════╝ -->
   <div class="video-section" data-video-section>
     <div class="video-sticky">
@@ -559,39 +586,58 @@
         <source src="lights.mp4" type="video/mp4">
       </video>
       <div class="video-overlay"></div>
-      <div class="video-text">
+      <div class="video-text" data-phase="primary">
         <h2>Atmosphere & Ambience</h2>
         <p>Lighting transforms everything. See spaces come alive with cinematic light design.</p>
+      </div>
+      <div class="video-content" data-phase="secondary">
+        <div class="inner">
+          <h2>Every Detail Matters</h2>
+          <p>
+            From natural daylight to dramatic evening scenes, our AI captures the mood
+            that makes buyers fall in love with a property before they ever visit.
+          </p>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Interstitial content -->
-  <section class="content-section fade-in">
-    <div class="inner">
-      <h2>Every Detail Matters</h2>
-      <p>
-        From natural daylight to dramatic evening scenes, our AI captures the mood
-        that makes buyers fall in love with a property before they ever visit.
-      </p>
-    </div>
-  </section>
-
   <!-- ╔══════════════════════════════════════════╗
-       ║  SECTION 5 — CTA video                    ║
+       ║  SECTION 5 — CTA                          ║
        ╚══════════════════════════════════════════╝ -->
-  <div class="video-section" data-video-section style="height: 200vh;">
+  <div class="video-section" data-video-section>
     <div class="video-sticky">
       <video muted playsinline webkit-playsinline preload="metadata" data-scroll-video>
         <source src="bridview.mp4" type="video/mp4">
       </video>
       <div class="video-overlay"></div>
-      <div class="video-text">
+      <div class="video-text" data-phase="primary">
         <h2>Ready to Transform Your Listings?</h2>
         <p><a href="#" class="cta-button">Get Started</a></p>
       </div>
     </div>
   </div>
+
+  <!-- ── Footer ── -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="footer-logo">LumiereMotionLabs</span>
+        <p class="footer-tagline">AI-powered cinematic real estate visualization</p>
+      </div>
+      <div class="footer-links">
+        <a href="https://instagram.com/lumieremotionlabs" target="_blank" rel="noopener" class="footer-social">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+          Instagram
+        </a>
+        <a href="mailto:hello@lumieremotionlabs.com" class="footer-social">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,4 12,13 2,4"/></svg>
+          Contact
+        </a>
+      </div>
+      <p class="footer-copy">&copy; 2026 LumiereMotionLabs. All rights reserved.</p>
+    </div>
+  </footer>
 
   <script>
     (function () {
@@ -601,25 +647,37 @@
       var videoSections = document.querySelectorAll('[data-video-section]');
       var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-      // Track current interpolated time per video for smooth lerping
+      // Per-video interpolation state
       var videoCurrentTimes = new Map();
-      // Track current interpolated parallax per section
-      var parallaxCurrentValues = new Map();
-      // Track text opacity targets and current lerped values
-      var targetTextOpacity = new Map();
-      var currentTextOpacity = new Map();
+      var parallaxPrimary = new Map();
+      var parallaxSecondary = new Map();
+      var opacityPrimary = new Map();
+      var opacitySecondary = new Map();
 
-      // Cached layout data to avoid getBoundingClientRect on every frame
+      // Targets
+      var targetTimes = new Map();
+      var targetParallaxPrimary = new Map();
+      var targetParallaxSecondary = new Map();
+      var targetOpacityPrimary = new Map();
+      var targetOpacitySecondary = new Map();
+
       var sectionLayouts = [];
 
-      // Pause all videos immediately
+      // Pause all videos
       videoSections.forEach(function (section) {
         var video = section.querySelector('[data-scroll-video]');
         video.pause();
         videoCurrentTimes.set(video, 0);
       });
 
-      // ── iOS / Mobile video priming ──
+      // Eager load first video
+      var firstVideo = videoSections[0] && videoSections[0].querySelector('[data-scroll-video]');
+      if (firstVideo) {
+        firstVideo.preload = 'auto';
+        firstVideo.load();
+      }
+
+      // iOS / Mobile video priming
       var videosReady = false;
       function primeVideos() {
         if (videosReady) return;
@@ -643,18 +701,14 @@
       document.addEventListener('scroll', primeVideos, { once: true, passive: true });
       document.addEventListener('click', primeVideos, { once: true, passive: true });
 
-      // ── Lerp utility for smooth interpolation ──
       function lerp(current, target, factor) {
         return current + (target - current) * factor;
       }
 
-      // Lerp factors — single layer of smoothing applied directly to
-      // video time and text parallax.  No intermediate scroll-position
-      // lerp, which previously added latency on top of these.
       var LERP_FACTOR = 0.22;
-      var LERP_FACTOR_TEXT = 0.20;
+      var LERP_FACTOR_TEXT = 0.18;
 
-      // ── Cache section layout to avoid layout thrashing ──
+      // Cache section layout
       function cacheSectionLayouts() {
         sectionLayouts = [];
         var scrollTop = window.scrollY || window.pageYOffset;
@@ -663,77 +717,91 @@
           sectionLayouts.push({
             section: section,
             video: section.querySelector('[data-scroll-video]'),
-            textEl: section.querySelector('.video-text'),
+            primaryText: section.querySelector('[data-phase="primary"]'),
+            secondaryText: section.querySelector('[data-phase="secondary"]'),
             top: scrollTop + rect.top,
-            height: section.offsetHeight - window.innerHeight
+            height: section.offsetHeight - window.innerHeight,
+            nearViewport: true
           });
         });
       }
 
-      // ── Scroll state ──
-      var targetTimes = new Map();
-      var targetParallax = new Map();
-
       function computeScrollState(scrollTop) {
         var docHeight = document.documentElement.scrollHeight - window.innerHeight;
-
-        // Global progress bar (GPU-composited via scaleX)
         var scrollFraction = docHeight > 0 ? scrollTop / docHeight : 0;
         progressBar.style.transform = 'scaleX(' + scrollFraction + ')';
+
+        var vh = window.innerHeight;
 
         for (var i = 0; i < sectionLayouts.length; i++) {
           var layout = sectionLayouts[i];
           var video = layout.video;
+
+          // Skip off-screen sections
+          var sectionEnd = layout.top + layout.height + vh;
+          if (sectionEnd < scrollTop - vh || layout.top > scrollTop + vh * 2) {
+            layout.nearViewport = false;
+            continue;
+          }
+          layout.nearViewport = true;
+
           if (!video.duration || !isFinite(video.duration)) continue;
 
-          // How far through this section (0 → 1)
           var rawProgress = (scrollTop - layout.top) / layout.height;
           var progress = Math.min(Math.max(rawProgress, 0), 1);
 
-          // 1.5x video speed: gentler pacing than 2x
-          var videoProgress = Math.min(progress * 1.5, 1);
+          // Video playback
+          var videoProgress = Math.min(progress * 1.2, 1);
           targetTimes.set(video, videoProgress * video.duration);
 
-          // Reduced parallax for smoother text movement
-          var parallaxFactor = isMobile ? 0.15 : 0.25;
-          targetParallax.set(layout.section, progress * window.innerHeight * parallaxFactor);
-
-          // Compute text opacity: fade in entering middle zone, fade out leaving it
-          // Middle zone is roughly 0.15–0.55 of scroll progress
-          var textOpacity = 0;
+          // ── Phase 1: Primary text (heading) ──
+          var primaryOpacity = 0;
           if (rawProgress >= 0 && rawProgress <= 1) {
-            var fadeInEnd = 0.15;   // fully visible by 15% scroll
-            var fadeOutStart = 0.55; // start fading out at 55%
-            var fadeOutEnd = 0.75;   // fully invisible by 75%
-            if (rawProgress < fadeInEnd) {
-              textOpacity = rawProgress / fadeInEnd;
-            } else if (rawProgress <= fadeOutStart) {
-              textOpacity = 1;
-            } else if (rawProgress < fadeOutEnd) {
-              textOpacity = 1 - (rawProgress - fadeOutStart) / (fadeOutEnd - fadeOutStart);
+            if (rawProgress < 0.05) {
+              primaryOpacity = 0;
+            } else if (rawProgress < 0.15) {
+              primaryOpacity = (rawProgress - 0.05) / 0.10;
+            } else if (rawProgress <= 0.32) {
+              primaryOpacity = 1;
+            } else if (rawProgress < 0.42) {
+              primaryOpacity = 1 - (rawProgress - 0.32) / 0.10;
             }
           }
-          // Store for lerped application in the animation loop
-          targetTextOpacity.set(layout.section, textOpacity);
+          targetOpacityPrimary.set(layout.section, primaryOpacity);
+
+          var pFactor = isMobile ? 0.25 : 0.4;
+          targetParallaxPrimary.set(layout.section, progress * vh * pFactor);
+
+          // ── Phase 2: Secondary content text ──
+          var secondaryOpacity = 0;
+          if (layout.secondaryText && rawProgress >= 0 && rawProgress <= 1) {
+            if (rawProgress < 0.45) {
+              secondaryOpacity = 0;
+            } else if (rawProgress < 0.52) {
+              secondaryOpacity = (rawProgress - 0.45) / 0.07;
+            } else if (rawProgress <= 0.68) {
+              secondaryOpacity = 1;
+            } else if (rawProgress < 0.78) {
+              secondaryOpacity = 1 - (rawProgress - 0.68) / 0.10;
+            }
+          }
+          targetOpacitySecondary.set(layout.section, secondaryOpacity);
+          targetParallaxSecondary.set(layout.section, Math.max(0, (progress - 0.4)) * vh * pFactor);
         }
       }
 
-      // ── Animation loop: runs continuously while scrolling for buttery smoothness ──
+      // Animation loop
       var animating = false;
       var scrollIdleFrames = 0;
-      var MAX_IDLE_FRAMES = 45; // Coast for ~0.75s after scroll stops
-
+      var MAX_IDLE_FRAMES = 45;
       var lastScrollY = window.scrollY || window.pageYOffset;
 
       function animationLoop() {
         var stillMoving = false;
-
-        // Read raw scroll position — no intermediate lerp layer
         var currentScrollY = window.scrollY || window.pageYOffset;
         var scrollChanged = currentScrollY !== lastScrollY;
         lastScrollY = currentScrollY;
 
-        // Recompute targets from actual scroll position
         if (scrollChanged || scrollIdleFrames === 0) {
           computeScrollState(currentScrollY);
         }
@@ -741,53 +809,64 @@
         for (var i = 0; i < sectionLayouts.length; i++) {
           var layout = sectionLayouts[i];
           var video = layout.video;
-          var textEl = layout.textEl;
+
+          if (!layout.nearViewport) continue;
           if (!video.duration || !isFinite(video.duration)) continue;
 
           // Lerp video time
           var target = targetTimes.get(video) || 0;
           var current = videoCurrentTimes.get(video) || 0;
           var next = lerp(current, target, LERP_FACTOR);
+          if (Math.abs(next - target) < 0.001) next = target;
+          else stillMoving = true;
 
-          // Snap if very close to avoid endless micro-updates
-          if (Math.abs(next - target) < 0.001) {
-            next = target;
-          } else {
-            stillMoving = true;
-          }
-
-          // Only seek when the change is perceptible (≈1 frame at 30fps)
-          if (Math.abs(video.currentTime - next) > 0.016) {
+          var seekThreshold = isMobile ? 0.04 : 0.016;
+          if (Math.abs(video.currentTime - next) > seekThreshold) {
             video.currentTime = next;
           }
           videoCurrentTimes.set(video, next);
 
-          // Lerp parallax with GPU-accelerated transform
-          if (textEl) {
-            var pTarget = targetParallax.get(layout.section) || 0;
-            var pCurrent = parallaxCurrentValues.get(layout.section) || 0;
-            var pNext = lerp(pCurrent, pTarget, LERP_FACTOR_TEXT);
-            if (Math.abs(pNext - pTarget) < 0.5) pNext = pTarget;
+          // Lerp primary text
+          if (layout.primaryText) {
+            var opTarget = targetOpacityPrimary.get(layout.section) || 0;
+            var opCurrent = opacityPrimary.get(layout.section) || 0;
+            var opNext = lerp(opCurrent, opTarget, LERP_FACTOR_TEXT);
+            if (Math.abs(opNext - opTarget) < 0.005) opNext = opTarget;
             else stillMoving = true;
-            parallaxCurrentValues.set(layout.section, pNext);
-            textEl.style.transform = 'translate3d(0,' + (-pNext) + 'px,0)';
+            opacityPrimary.set(layout.section, opNext);
 
-            // Lerp text opacity for smooth fade in/out
-            var oTarget = targetTextOpacity.get(layout.section) || 0;
-            var oCurrent = currentTextOpacity.get(layout.section) || 0;
-            var oNext = lerp(oCurrent, oTarget, LERP_FACTOR_TEXT);
-            if (Math.abs(oNext - oTarget) < 0.005) oNext = oTarget;
+            var ppTarget = targetParallaxPrimary.get(layout.section) || 0;
+            var ppCurrent = parallaxPrimary.get(layout.section) || 0;
+            var ppNext = lerp(ppCurrent, ppTarget, LERP_FACTOR_TEXT);
+            if (Math.abs(ppNext - ppTarget) < 0.5) ppNext = ppTarget;
             else stillMoving = true;
-            currentTextOpacity.set(layout.section, oNext);
-            // Apply to h2 and p children
-            var h2 = textEl.querySelector('h2');
-            var pEl = textEl.querySelector('p');
-            if (h2) h2.style.opacity = oNext;
-            if (pEl) pEl.style.opacity = oNext;
+            parallaxPrimary.set(layout.section, ppNext);
+
+            layout.primaryText.style.opacity = opNext;
+            layout.primaryText.style.transform = 'translate3d(0,' + (-ppNext) + 'px,0)';
+          }
+
+          // Lerp secondary text
+          if (layout.secondaryText) {
+            var osTarget = targetOpacitySecondary.get(layout.section) || 0;
+            var osCurrent = opacitySecondary.get(layout.section) || 0;
+            var osNext = lerp(osCurrent, osTarget, LERP_FACTOR_TEXT);
+            if (Math.abs(osNext - osTarget) < 0.005) osNext = osTarget;
+            else stillMoving = true;
+            opacitySecondary.set(layout.section, osNext);
+
+            var psTarget = targetParallaxSecondary.get(layout.section) || 0;
+            var psCurrent = parallaxSecondary.get(layout.section) || 0;
+            var psNext = lerp(psCurrent, psTarget, LERP_FACTOR_TEXT);
+            if (Math.abs(psNext - psTarget) < 0.5) psNext = psTarget;
+            else stillMoving = true;
+            parallaxSecondary.set(layout.section, psNext);
+
+            layout.secondaryText.style.opacity = osNext;
+            layout.secondaryText.style.transform = 'translate3d(0,' + (-psNext) + 'px,0)';
           }
         }
 
-        // Keep the loop alive for extra frames after values converge
         if (stillMoving) {
           scrollIdleFrames = 0;
           requestAnimationFrame(animationLoop);
@@ -807,20 +886,24 @@
         }
       }
 
-      // ── Scroll listener: just kick the animation loop ──
       window.addEventListener('scroll', function () {
         startAnimation();
       }, { passive: true });
 
-      // Run once on load
+      // On load — show hero text immediately
       window.addEventListener('load', function () {
         lastScrollY = window.scrollY || window.pageYOffset;
         cacheSectionLayouts();
+        if (sectionLayouts[0] && sectionLayouts[0].primaryText) {
+          sectionLayouts[0].primaryText.style.opacity = 1;
+          targetOpacityPrimary.set(sectionLayouts[0].section, 1);
+          opacityPrimary.set(sectionLayouts[0].section, 1);
+        }
         computeScrollState(lastScrollY);
         startAnimation();
       });
 
-      // Re-cache layouts on resize/orientation change
+      // Re-cache on resize
       var resizeTimer;
       window.addEventListener('resize', function () {
         clearTimeout(resizeTimer);
@@ -830,22 +913,6 @@
           startAnimation();
         }, 100);
       }, { passive: true });
-
-      // Intersection Observer for fade-in content sections
-      var threshold = window.innerWidth < 560 ? 0.06 : 0.15;
-      var observer = new IntersectionObserver(
-        function (entries) {
-          entries.forEach(function (entry) {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('visible');
-            }
-          });
-        },
-        { threshold: threshold }
-      );
-      document.querySelectorAll('.fade-in').forEach(function (el) {
-        observer.observe(el);
-      });
     })();
   </script>
 
