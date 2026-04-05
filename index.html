@@ -653,6 +653,7 @@
       var parallaxSecondary = new Map();
       var opacityPrimary = new Map();
       var opacitySecondary = new Map();
+      var fadeBlackCurrent = new Map();
 
       // Targets
       var targetTimes = new Map();
@@ -660,53 +661,104 @@
       var targetParallaxSecondary = new Map();
       var targetOpacityPrimary = new Map();
       var targetOpacitySecondary = new Map();
+      var targetFadeBlack = new Map();
 
       var sectionLayouts = [];
+
+      // Track which videos have been primed and loaded
+      var videoReady = new Map();
+      var videoLoading = new Map();
 
       // Pause all videos
       videoSections.forEach(function (section) {
         var video = section.querySelector('[data-scroll-video]');
         video.pause();
         videoCurrentTimes.set(video, 0);
+        videoReady.set(video, false);
+        videoLoading.set(video, false);
+
+        // Mark ready once enough data is buffered
+        video.addEventListener('canplaythrough', function () {
+          videoReady.set(video, true);
+          videoLoading.set(video, false);
+        });
+
+        // Retry on error after a short delay
+        video.addEventListener('error', function () {
+          videoReady.set(video, false);
+          videoLoading.set(video, false);
+          setTimeout(function () { loadVideo(video); }, 2000);
+        });
+
+        // Also mark ready on canplay (less data than canplaythrough but usable)
+        video.addEventListener('canplay', function () {
+          videoReady.set(video, true);
+        });
       });
 
-      // Eager load first video
-      var firstVideo = videoSections[0] && videoSections[0].querySelector('[data-scroll-video]');
-      if (firstVideo) {
-        firstVideo.preload = 'auto';
-        firstVideo.load();
+      function loadVideo(video) {
+        if (videoReady.get(video) || videoLoading.get(video)) return;
+        videoLoading.set(video, true);
+        video.preload = 'auto';
+        video.load();
       }
 
-      // iOS / Mobile video priming
-      var videosReady = false;
-      function primeVideos() {
-        if (videosReady) return;
-        videosReady = true;
+      // Prime a video for iOS — play/pause trick to unlock hardware decoder
+      function primeVideo(video) {
+        var p = video.play();
+        if (p !== undefined) {
+          p.then(function () {
+            video.pause();
+            video.currentTime = 0;
+          }).catch(function () {
+            // Silently fail — will retry via loadVideo on next scroll
+            videoLoading.set(video, false);
+          });
+        }
+      }
+
+      // Eager load first video immediately
+      var firstVideo = videoSections[0] && videoSections[0].querySelector('[data-scroll-video]');
+      if (firstVideo) {
+        loadVideo(firstVideo);
+      }
+
+      // On first interaction, prime all videos for iOS playback unlock
+      var hasPrimed = false;
+      function primeAllVideos() {
+        if (hasPrimed) return;
+        hasPrimed = true;
         videoSections.forEach(function (section) {
           var video = section.querySelector('[data-scroll-video]');
-          video.load();
-          var p = video.play();
-          if (p !== undefined) {
-            p.then(function () {
-              video.pause();
-              video.currentTime = 0;
-            }).catch(function () {
-              videosReady = false;
-            });
-          }
+          loadVideo(video);
+          primeVideo(video);
         });
       }
 
-      document.addEventListener('touchstart', primeVideos, { once: true, passive: true });
-      document.addEventListener('scroll', primeVideos, { once: true, passive: true });
-      document.addEventListener('click', primeVideos, { once: true, passive: true });
+      document.addEventListener('touchstart', primeAllVideos, { once: true, passive: true });
+      document.addEventListener('scroll', primeAllVideos, { once: true, passive: true });
+      document.addEventListener('click', primeAllVideos, { once: true, passive: true });
+
+      // Progressive loading — load videos as their sections approach viewport
+      function loadNearbyVideos(scrollTop) {
+        var vh = window.innerHeight;
+        for (var i = 0; i < sectionLayouts.length; i++) {
+          var layout = sectionLayouts[i];
+          var video = layout.video;
+          // Start loading when section is within 2 viewports
+          if (layout.top < scrollTop + vh * 3 && !videoReady.get(video)) {
+            loadVideo(video);
+            if (hasPrimed) primeVideo(video);
+          }
+        }
+      }
 
       function lerp(current, target, factor) {
         return current + (target - current) * factor;
       }
 
-      var LERP_FACTOR = 0.22;
-      var LERP_FACTOR_TEXT = 0.18;
+      var LERP_FACTOR = 0.14;
+      var LERP_FACTOR_TEXT = 0.14;
 
       // Cache section layout
       function cacheSectionLayouts() {
@@ -717,6 +769,7 @@
           sectionLayouts.push({
             section: section,
             video: section.querySelector('[data-scroll-video]'),
+            overlay: section.querySelector('.video-overlay'),
             primaryText: section.querySelector('[data-phase="primary"]'),
             secondaryText: section.querySelector('[data-phase="secondary"]'),
             top: scrollTop + rect.top,
@@ -730,6 +783,9 @@
         var docHeight = document.documentElement.scrollHeight - window.innerHeight;
         var scrollFraction = docHeight > 0 ? scrollTop / docHeight : 0;
         progressBar.style.transform = 'scaleX(' + scrollFraction + ')';
+
+        // Progressively load videos approaching the viewport
+        loadNearbyVideos(scrollTop);
 
         var vh = window.innerHeight;
 
@@ -755,16 +811,24 @@
           targetTimes.set(video, videoProgress * video.duration);
 
           // ── Phase 1: Primary text (heading) ──
+          // Hero: visible immediately, fades out 28-38%
+          // Others: fades in 8-16%, visible 16-28%, fades out 28-38%
           var primaryOpacity = 0;
-          if (rawProgress >= 0 && rawProgress <= 1) {
-            if (rawProgress < 0.05) {
-              primaryOpacity = 0;
-            } else if (rawProgress < 0.15) {
-              primaryOpacity = (rawProgress - 0.05) / 0.10;
-            } else if (rawProgress <= 0.32) {
+          if (i === 0) {
+            if (rawProgress <= 0.28) {
               primaryOpacity = 1;
-            } else if (rawProgress < 0.42) {
-              primaryOpacity = 1 - (rawProgress - 0.32) / 0.10;
+            } else if (rawProgress < 0.38) {
+              primaryOpacity = 1 - (rawProgress - 0.28) / 0.10;
+            }
+          } else if (rawProgress >= 0 && rawProgress <= 1) {
+            if (rawProgress < 0.08) {
+              primaryOpacity = 0;
+            } else if (rawProgress < 0.16) {
+              primaryOpacity = (rawProgress - 0.08) / 0.08;
+            } else if (rawProgress <= 0.28) {
+              primaryOpacity = 1;
+            } else if (rawProgress < 0.38) {
+              primaryOpacity = 1 - (rawProgress - 0.28) / 0.10;
             }
           }
           targetOpacityPrimary.set(layout.section, primaryOpacity);
@@ -773,20 +837,35 @@
           targetParallaxPrimary.set(layout.section, progress * vh * pFactor);
 
           // ── Phase 2: Secondary content text ──
+          // Gap: 38-48% (no text visible)
+          // Fades in 48-55%, visible 55-62%, fades out 62-70%
           var secondaryOpacity = 0;
           if (layout.secondaryText && rawProgress >= 0 && rawProgress <= 1) {
-            if (rawProgress < 0.45) {
+            if (rawProgress < 0.48) {
               secondaryOpacity = 0;
-            } else if (rawProgress < 0.52) {
-              secondaryOpacity = (rawProgress - 0.45) / 0.07;
-            } else if (rawProgress <= 0.68) {
+            } else if (rawProgress < 0.55) {
+              secondaryOpacity = (rawProgress - 0.48) / 0.07;
+            } else if (rawProgress <= 0.62) {
               secondaryOpacity = 1;
-            } else if (rawProgress < 0.78) {
-              secondaryOpacity = 1 - (rawProgress - 0.68) / 0.10;
+            } else if (rawProgress < 0.70) {
+              secondaryOpacity = 1 - (rawProgress - 0.62) / 0.08;
             }
           }
           targetOpacitySecondary.set(layout.section, secondaryOpacity);
           targetParallaxSecondary.set(layout.section, Math.max(0, (progress - 0.4)) * vh * pFactor);
+
+          // ── Fade to black at section boundaries ──
+          // Outgoing: fully dark by 92% (before the sticky unsticks at 100%)
+          // Incoming: start fully dark, brighten over first 8%
+          var fadeBlack = 0;
+          if (rawProgress > 0.72) {
+            fadeBlack = Math.min((rawProgress - 0.72) / 0.20, 1);
+          }
+          if (i > 0 && rawProgress < 0.08) {
+            var inFade = 1 - Math.max(rawProgress, 0) / 0.08;
+            fadeBlack = Math.max(fadeBlack, inFade);
+          }
+          targetFadeBlack.set(layout.section, fadeBlack);
         }
       }
 
@@ -826,14 +905,9 @@
           }
           videoCurrentTimes.set(video, next);
 
-          // Lerp primary text
+          // Apply primary text — opacity direct, parallax lerped
           if (layout.primaryText) {
-            var opTarget = targetOpacityPrimary.get(layout.section) || 0;
-            var opCurrent = opacityPrimary.get(layout.section) || 0;
-            var opNext = lerp(opCurrent, opTarget, LERP_FACTOR_TEXT);
-            if (Math.abs(opNext - opTarget) < 0.005) opNext = opTarget;
-            else stillMoving = true;
-            opacityPrimary.set(layout.section, opNext);
+            var opVal = targetOpacityPrimary.get(layout.section) || 0;
 
             var ppTarget = targetParallaxPrimary.get(layout.section) || 0;
             var ppCurrent = parallaxPrimary.get(layout.section) || 0;
@@ -842,18 +916,13 @@
             else stillMoving = true;
             parallaxPrimary.set(layout.section, ppNext);
 
-            layout.primaryText.style.opacity = opNext;
+            layout.primaryText.style.opacity = opVal;
             layout.primaryText.style.transform = 'translate3d(0,' + (-ppNext) + 'px,0)';
           }
 
-          // Lerp secondary text
+          // Apply secondary text — opacity direct, parallax lerped
           if (layout.secondaryText) {
-            var osTarget = targetOpacitySecondary.get(layout.section) || 0;
-            var osCurrent = opacitySecondary.get(layout.section) || 0;
-            var osNext = lerp(osCurrent, osTarget, LERP_FACTOR_TEXT);
-            if (Math.abs(osNext - osTarget) < 0.005) osNext = osTarget;
-            else stillMoving = true;
-            opacitySecondary.set(layout.section, osNext);
+            var osVal = targetOpacitySecondary.get(layout.section) || 0;
 
             var psTarget = targetParallaxSecondary.get(layout.section) || 0;
             var psCurrent = parallaxSecondary.get(layout.section) || 0;
@@ -862,8 +931,15 @@
             else stillMoving = true;
             parallaxSecondary.set(layout.section, psNext);
 
-            layout.secondaryText.style.opacity = osNext;
+            layout.secondaryText.style.opacity = osVal;
             layout.secondaryText.style.transform = 'translate3d(0,' + (-psNext) + 'px,0)';
+          }
+
+          // Apply fade-to-black directly (no lerp — must be precise before unstick)
+          if (layout.overlay) {
+            var fb = targetFadeBlack.get(layout.section) || 0;
+            var overlayOpacity = 0.45 + fb * 0.55;
+            layout.overlay.style.background = 'rgba(0,0,0,' + overlayOpacity + ')';
           }
         }
 
@@ -886,8 +962,18 @@
         }
       }
 
+      // Hide scroll hint on first scroll
+      var scrollHint = document.querySelector('.scroll-hint');
+      var hintHidden = false;
+
       window.addEventListener('scroll', function () {
         startAnimation();
+        if (!hintHidden && scrollHint) {
+          hintHidden = true;
+          scrollHint.style.animation = 'none';
+          scrollHint.style.transition = 'opacity 0.4s ease';
+          scrollHint.style.opacity = '0';
+        }
       }, { passive: true });
 
       // On load — show hero text immediately
