@@ -51,7 +51,6 @@
     .video-section {
       position: relative;
       height: 350vh;
-      background: #000;
     }
 
     .video-section:last-of-type {
@@ -73,8 +72,7 @@
       height: 100%;
       object-fit: cover;
       display: block;
-      will-change: filter, transform;
-      background: #000;
+      will-change: filter;
     }
 
     .video-overlay {
@@ -759,8 +757,8 @@
         return current + (target - current) * factor;
       }
 
-      var LERP_FACTOR = 0.18;
-      var LERP_FACTOR_TEXT = 0.16;
+      var LERP_FACTOR = 0.14;
+      var LERP_FACTOR_TEXT = 0.14;
 
       // Cache section layout
       function cacheSectionLayouts() {
@@ -816,23 +814,11 @@
           // Hero: visible immediately, fades out 28-38%
           // Others: fades in 8-16%, visible 16-28%, fades out 28-38%
           var primaryOpacity = 0;
-          var isLastSection = (i === sectionLayouts.length - 1);
           if (i === 0) {
             if (rawProgress <= 0.28) {
               primaryOpacity = 1;
             } else if (rawProgress < 0.38) {
               primaryOpacity = 1 - (rawProgress - 0.28) / 0.10;
-            }
-          } else if (isLastSection && rawProgress >= 0 && rawProgress <= 1) {
-            // CTA section: visible longer (8-70%)
-            if (rawProgress < 0.08) {
-              primaryOpacity = 0;
-            } else if (rawProgress < 0.16) {
-              primaryOpacity = (rawProgress - 0.08) / 0.08;
-            } else if (rawProgress <= 0.70) {
-              primaryOpacity = 1;
-            } else if (rawProgress < 0.80) {
-              primaryOpacity = 1 - (rawProgress - 0.70) / 0.10;
             }
           } else if (rawProgress >= 0 && rawProgress <= 1) {
             if (rawProgress < 0.08) {
@@ -868,18 +854,18 @@
           targetOpacitySecondary.set(layout.section, secondaryOpacity);
           targetParallaxSecondary.set(layout.section, Math.max(0, (progress - 0.4)) * vh * pFactor);
 
-          // ── Blur crossfade at section boundaries ──
-          // Outgoing: blur ramps 75-95% (short but aggressive)
-          // Incoming: starts blurred, sharpens over first 8%
-          var blurAmount = 0;
-          if (rawProgress > 0.75) {
-            blurAmount = Math.min((rawProgress - 0.75) / 0.20, 1);
+          // ── Fade to black at section boundaries ──
+          // Outgoing: fully dark by 92% (before the sticky unsticks at 100%)
+          // Incoming: start fully dark, brighten over first 8%
+          var fadeBlack = 0;
+          if (rawProgress > 0.72) {
+            fadeBlack = Math.min((rawProgress - 0.72) / 0.20, 1);
           }
           if (i > 0 && rawProgress < 0.08) {
-            var inBlur = 1 - Math.max(rawProgress, 0) / 0.08;
-            blurAmount = Math.max(blurAmount, inBlur);
+            var inFade = 1 - Math.max(rawProgress, 0) / 0.08;
+            fadeBlack = Math.max(fadeBlack, inFade);
           }
-          targetFadeBlack.set(layout.section, blurAmount);
+          targetFadeBlack.set(layout.section, fadeBlack);
         }
       }
 
@@ -913,7 +899,7 @@
           if (Math.abs(next - target) < 0.001) next = target;
           else stillMoving = true;
 
-          var seekThreshold = isMobile ? 0.02 : 0.008;
+          var seekThreshold = isMobile ? 0.04 : 0.016;
           if (Math.abs(video.currentTime - next) > seekThreshold) {
             video.currentTime = next;
           }
@@ -949,33 +935,11 @@
             layout.secondaryText.style.transform = 'translate3d(0,' + (-psNext) + 'px,0)';
           }
 
-          // Apply heavy blur at section boundaries — no darkening, just blur
-          // so videos become abstract color fields and the join line disappears
-          var blurVal = targetFadeBlack.get(layout.section) || 0;
-          var maxBlur = 60; // very heavy blur makes video into color wash
-          var blurPx = blurVal * maxBlur;
-          var baseBlur = window.innerWidth >= 1440 ? 0.6 : (window.innerWidth >= 900 ? 0.4 : 0);
-          var totalBlur = baseBlur + blurPx;
-
-          if (totalBlur > 0.1) {
-            video.style.filter = 'blur(' + totalBlur + 'px)';
-            // Scale up 20% at max blur to fully hide blurred edges
-            var scaleVal = 1 + blurVal * 0.20;
-            video.style.transform = 'scale(' + Math.max(scaleVal, window.innerWidth >= 900 ? 1.01 : 1) + ')';
-          } else {
-            video.style.filter = '';
-            video.style.transform = window.innerWidth >= 900 ? 'scale(1.01)' : '';
-          }
-
-          // Subtle overlay adjustment — only slightly darken, rely on blur
+          // Apply fade-to-black directly (no lerp — must be precise before unstick)
           if (layout.overlay) {
-            if (blurVal > 0.01) {
-              // Gently increase overlay opacity during blur (0.45 → 0.65 max)
-              var overlayOpacity = 0.45 + blurVal * 0.20;
-              layout.overlay.style.background = 'rgba(0,0,0,' + overlayOpacity + ')';
-            } else {
-              layout.overlay.style.background = 'rgba(0,0,0,0.45)';
-            }
+            var fb = targetFadeBlack.get(layout.section) || 0;
+            var overlayOpacity = 0.45 + fb * 0.55;
+            layout.overlay.style.background = 'rgba(0,0,0,' + overlayOpacity + ')';
           }
         }
 
