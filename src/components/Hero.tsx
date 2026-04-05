@@ -1,24 +1,25 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { heroData, statsData } from "@/data/mockData";
+import Image from "next/image";
 
 export function Hero() {
   return (
-    <section className="relative min-h-screen bg-neutral-950 flex flex-col items-center justify-center text-center px-6 pt-24 pb-12 overflow-hidden">
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(251,191,36,0.08),transparent)]" />
+    <section className="relative min-h-screen bg-neutral-950 flex flex-col items-center justify-center text-center px-6 pt-24 pb-0 overflow-hidden">
+      {/* Ambient glow */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_40%_at_50%_-10%,rgba(251,191,36,0.1),transparent)]" />
 
-      {/* Grid pattern */}
+      {/* Grid */}
       <div
-        className="absolute inset-0 opacity-[0.03]"
+        className="absolute inset-0 opacity-[0.025]"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(255,255,255,0.5) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.5) 1px,transparent 1px)",
+            "linear-gradient(rgba(255,255,255,0.8) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.8) 1px,transparent 1px)",
           backgroundSize: "60px 60px",
         }}
       />
 
-      <div className="relative z-10 max-w-4xl mx-auto">
+      <div className="relative z-10 max-w-4xl mx-auto w-full">
         <Badge
           variant="outline"
           className="border-amber-400/30 text-amber-400 bg-amber-400/5 text-xs tracking-widest uppercase mb-6 px-4 py-1.5"
@@ -36,7 +37,7 @@ export function Hero() {
           {heroData.subheadline}
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+        <div className="flex flex-col sm:flex-row gap-3 justify-center mb-16">
           <Button
             size="lg"
             className="bg-amber-400 hover:bg-amber-300 text-neutral-950 font-semibold px-8 text-sm"
@@ -53,14 +54,28 @@ export function Hero() {
           </Button>
         </div>
 
-        {/* Scroll prompt */}
-        <p className="text-neutral-600 text-xs font-mono mt-12 tracking-widest">
-          ↓ SCROLL TO SEE THE MAGIC
-        </p>
+        {/* Room preview teaser — hints at the transformation below */}
+        <div className="relative w-full max-w-3xl mx-auto rounded-t-2xl overflow-hidden aspect-[16/7] ring-1 ring-white/10 shadow-2xl">
+          <Image
+            src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=1200&q=80&auto=format&fit=crop"
+            alt="AI staged luxury living room"
+            fill
+            sizes="(max-width: 768px) 100vw, 768px"
+            className="object-cover object-center"
+            priority
+          />
+          {/* Gradient fade to section below */}
+          <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-transparent to-transparent" />
+          {/* Floating label */}
+          <div className="absolute bottom-4 left-4 bg-black/60 backdrop-blur-sm border border-amber-400/30 rounded-full px-3 py-1.5 flex items-center gap-1.5">
+            <span className="text-amber-400 text-xs">✦</span>
+            <span className="text-white text-xs font-medium">AI Generated · Scroll to see how</span>
+          </div>
+        </div>
       </div>
 
       {/* Stats strip */}
-      <div className="relative z-10 mt-auto w-full max-w-3xl border-t border-neutral-800 pt-8 mt-16">
+      <div className="relative z-10 w-full max-w-3xl border-t border-neutral-800/60 pt-8 pb-12 mt-0">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {statsData.map((stat) => (
             <div key={stat.label} className="text-center">
