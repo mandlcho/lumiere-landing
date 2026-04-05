@@ -123,7 +123,7 @@ export function VideoScrollSection() {
             muted
             playsInline
             preload="auto"
-            src="https://videos.pexels.com/video-files/29466011/12684177_1280_720_60fps.mp4"
+            src="/videos/room-transform.mp4"
             onLoadedMetadata={() => setVideoReady(true)}
           />
 
