@@ -1,5 +1,5 @@
 import { Hero } from "@/components/Hero";
-import { ScrollTransform } from "@/components/ScrollTransform";
+import { VideoScrollSection } from "@/components/VideoScrollSection";
 import { HowItWorks } from "@/components/HowItWorks";
 import { Features } from "@/components/Features";
 import { CTA } from "@/components/CTA";
@@ -18,11 +18,11 @@ export default function Home() {
           Scroll to Transform
         </p>
         <p className="text-neutral-500 text-sm mt-1">
-          Watch AI stage an empty room in real-time as you scroll
+          Scroll through an AI-staged luxury property — frame by frame
         </p>
       </div>
 
-      <ScrollTransform />
+      <VideoScrollSection />
 
       <HowItWorks />
       <Features />
