@@ -123,18 +123,9 @@ export function VideoScrollSection() {
             muted
             playsInline
             preload="auto"
+            src="https://videos.pexels.com/video-files/29466011/12684177_1280_720_60fps.mp4"
             onLoadedMetadata={() => setVideoReady(true)}
-          >
-            {/* HD source first, fallback to SD */}
-            <source
-              src="https://videos.pexels.com/video-files/29466011/12684175_2560_1440_30fps.mp4"
-              type="video/mp4"
-            />
-            <source
-              src="https://videos.pexels.com/video-files/29466011/12684175_640_360_60fps.mp4"
-              type="video/mp4"
-            />
-          </video>
+          />
 
           {/* AI Staged badge */}
           <div className="absolute bottom-4 right-4 bg-black/60 backdrop-blur-sm border border-amber-400/30 rounded-full px-3 py-1.5 flex items-center gap-1.5 z-10">
