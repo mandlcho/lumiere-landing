@@ -54,7 +54,7 @@ export function ScrollTransform({ className = "" }: ScrollTransformProps) {
         <div className="relative w-full max-w-5xl mx-auto aspect-[16/9] rounded-2xl overflow-hidden shadow-2xl ring-1 ring-white/5">
           {/* BEFORE — empty unfurnished room */}
           <Image
-            src="https://images.unsplash.com/photo-1598928506311-c55ded91a20c?w=1200&q=85&auto=format&fit=crop"
+            src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1200&q=85&auto=format&fit=crop"
             alt="Empty room before AI staging"
             fill
             sizes="(max-width: 1024px) 100vw, 1024px"
