@@ -78,7 +78,15 @@
     (function () {
       var isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
       var isNarrow = window.innerWidth < 768;
-      var target = (isTouch || isNarrow) ? 'mobile.html' : 'desktop.html';
+      var isMobile = isTouch || isNarrow;
+      var lang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+      var isCN = lang.indexOf('zh') === 0;
+      var target;
+      if (isMobile) {
+        target = isCN ? 'mobile-cn.html' : 'mobile.html';
+      } else {
+        target = isCN ? 'desktop-cn.html' : 'desktop.html';
+      }
       window.location.replace(target);
     })();
   </script>
