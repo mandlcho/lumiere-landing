@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Realty Dept. - Editorial 7</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  @page { size: 210mm 148mm; margin: 0; }
+
+  body {
+    width: 210mm;
+    height: 148mm;
+    font-family: 'Inter', sans-serif;
+    background: #0a0a0a;
+    color: #e8e4df;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 52% 48%;
+  }
+
+  /* ---- LEFT: Full bleed image ---- */
+  .image-frame {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .image-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .image-frame::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to right, transparent 70%, #0a0a0a 100%),
+      linear-gradient(to top, rgba(10,10,10,0.4) 0%, transparent 30%);
+  }
+
+  /* Folio number */
+  .folio {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    font-size: 0.34rem;
+    letter-spacing: 0.2em;
+    opacity: 0.35;
+    z-index: 2;
+  }
+
+  /* ---- RIGHT: Editorial text ---- */
+  .editorial {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1.5rem 1.6rem 1.3rem 1.1rem;
+    position: relative;
+  }
+
+  /* Top: logo + section label */
+  .mast {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .section-label {
+    font-size: 0.28rem;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    opacity: 0.35;
+    line-height: 1;
+  }
+
+  .mast .logo img {
+    width: 4.8rem;
+    height: auto;
+    object-fit: contain;
+  }
+
+  /* Headline block */
+  .headline-block {
+    padding-right: 0.3rem;
+  }
+
+  .kicker {
+    font-size: 0.3rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    opacity: 0.4;
+    margin-bottom: 0.55rem;
+    padding-bottom: 0.45rem;
+    border-bottom: 1px solid rgba(232,228,223,0.1);
+  }
+
+  .headline-block h1 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 1.65rem;
+    line-height: 1.08;
+    letter-spacing: -0.005em;
+    margin-bottom: 0.6rem;
+    color: #f5f2ee;
+  }
+
+  .deck {
+    font-weight: 300;
+    font-size: 0.4rem;
+    line-height: 1.8;
+    letter-spacing: 0.025em;
+    opacity: 0.6;
+    max-width: 96%;
+  }
+
+  /* Pull quote */
+  .pull-quote {
+    position: relative;
+    padding-left: 0.7rem;
+    border-left: 2px solid rgba(232,228,223,0.15);
+  }
+
+  .pull-quote p {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 0.52rem;
+    line-height: 1.5;
+    letter-spacing: 0.01em;
+    color: #f5f2ee;
+    opacity: 0.85;
+  }
+
+  .pull-quote .attr {
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 0.28rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    opacity: 0.35;
+    margin-top: 0.3rem;
+    display: block;
+  }
+
+  /* Footer CTA */
+  .page-foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding-top: 0.55rem;
+    border-top: 1px solid rgba(232,228,223,0.08);
+  }
+
+  .cta-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.12rem;
+  }
+
+  .cta-stack .cta-label {
+    font-size: 0.3rem;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    opacity: 0.4;
+  }
+
+  .cta-stack .phone {
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    font-size: 0.62rem;
+    letter-spacing: 0.03em;
+    color: #f5f2ee;
+  }
+
+  .page-foot .web {
+    font-size: 0.28rem;
+    font-weight: 300;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.3;
+    text-align: right;
+    line-height: 1.8;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="image-frame">
+    <img src="still-hero.jpg" alt="">
+    <div class="folio">001</div>
+  </div>
+
+  <div class="editorial">
+
+    <div class="mast">
+      <div class="section-label">Property &middot; Singapore</div>
+      <div class="logo">
+        <img src="realty-dept-logo.jpg" alt="The Realty Dept.">
+      </div>
+    </div>
+
+    <div class="headline-block">
+      <div class="kicker">Seller Advisory</div>
+      <h1>Your Home Is<br>Worth More Than<br>You Think.</h1>
+      <p class="deck">Most sellers leave 8&ndash;15% on the table before the first offer arrives. The right pricing strategy, the right visuals, and the right negotiation change everything.</p>
+    </div>
+
+    <div class="pull-quote">
+      <p>&ldquo;We don&rsquo;t just list homes. We position them to win.&rdquo;</p>
+      <span class="attr">&mdash; The Realty Dept.</span>
+    </div>
+
+    <div class="page-foot">
+      <div class="cta-stack">
+        <span class="cta-label">Free home valuation</span>
+        <span class="phone">+65 9777 7311</span>
+      </div>
+      <div class="web">
+        therealtydept.com<br>
+        @realtydept.sg
+      </div>
+    </div>
+
+  </div>
+
+</div>
+</body>
+</html>

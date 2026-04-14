@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Realty Dept. - Flyer 4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  @page { size: 210mm 148mm; margin: 0; }
+
+  body {
+    width: 210mm;
+    height: 148mm;
+    font-family: 'Inter', sans-serif;
+    background: #000;
+    color: #fff;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .flyer {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+  }
+
+  /* --- Left hero image area --- */
+  .hero {
+    position: relative;
+    width: 58%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to right,
+      rgba(0,0,0,0.1) 0%,
+      rgba(0,0,0,0.05) 50%,
+      rgba(0,0,0,0.7) 90%,
+      rgba(0,0,0,1) 100%
+    );
+  }
+
+  .hero-text {
+    position: absolute;
+    bottom: 1.4rem;
+    left: 1.4rem;
+    right: 2rem;
+  }
+
+  .hero-text .hook {
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 1.55rem;
+    line-height: 1.12;
+    letter-spacing: 0.01em;
+    margin-bottom: 0.4rem;
+  }
+
+  .hero-text .hook strong {
+    font-weight: 700;
+    font-style: normal;
+  }
+
+  .hero-text p {
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    font-size: 0.42rem;
+    letter-spacing: 0.08em;
+    opacity: 0.8;
+    line-height: 1.6;
+  }
+
+  /* --- Right content area --- */
+  .content {
+    flex: 1;
+    background: #000;
+    padding: 1.2rem 1.3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .logo-area {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .logo-area img {
+    width: 5.5rem;
+    height: auto;
+    object-fit: contain;
+  }
+
+  /* --- Value props --- */
+  .values {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .value {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 0.5rem 0.65rem;
+  }
+
+  .value h3 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 500;
+    font-style: italic;
+    font-size: 0.52rem;
+    margin-bottom: 0.12rem;
+    letter-spacing: 0.01em;
+  }
+
+  .value p {
+    font-size: 0.36rem;
+    font-weight: 300;
+    line-height: 1.5;
+    opacity: 0.65;
+    letter-spacing: 0.02em;
+  }
+
+  /* --- CTA footer --- */
+  .footer {
+    padding-top: 0.6rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .cta-line {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 0.52rem;
+    margin-bottom: 0.35rem;
+    letter-spacing: 0.01em;
+  }
+
+  .phone {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.2rem;
+  }
+
+  .contact-sub {
+    font-size: 0.32rem;
+    font-weight: 300;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    opacity: 0.5;
+    line-height: 1.7;
+  }
+</style>
+</head>
+<body>
+<div class="flyer">
+
+  <div class="hero">
+    <img src="still-hero.jpg" alt="Cinematic interior">
+    <div class="hero-overlay"></div>
+    <div class="hero-text">
+      <div class="hook">Your Home Is Worth More<br>Than You Think.</div>
+      <p>Most sellers leave money on the table.<br>We make sure you don't.</p>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <div class="logo-area">
+      <img src="realty-dept-logo.jpg" alt="The Realty Dept.">
+    </div>
+
+    <div class="values">
+      <div class="value">
+        <h3>Priced to Sell, Not to Sit</h3>
+        <p>Data-driven pricing strategy that attracts serious buyers fast.</p>
+      </div>
+      <div class="value">
+        <h3>Cinematic Marketing</h3>
+        <p>Professional video, staging, and visuals that make your listing unmissable.</p>
+      </div>
+      <div class="value">
+        <h3>Negotiation That Pays</h3>
+        <p>We fight for every dollar so you walk away with more.</p>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="cta-line">Find out what your home is really worth.</div>
+      <div class="phone">+65 9777 7311</div>
+      <div class="contact-sub">Free, no-obligation home valuation</div>
+    </div>
+
+  </div>
+
+</div>
+</body>
+</html>

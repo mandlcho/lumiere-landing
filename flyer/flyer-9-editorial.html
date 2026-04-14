@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Realty Dept. - Editorial 9</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  @page { size: 210mm 148mm; margin: 0; }
+
+  body {
+    width: 210mm;
+    height: 148mm;
+    font-family: 'Inter', sans-serif;
+    background: #0a0a0a;
+    color: #e8e4df;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+  }
+
+  /* ---- LEFT: Editorial text column ---- */
+  .text-col {
+    width: 42%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1.2rem 1.3rem 1.1rem 1.4rem;
+    position: relative;
+    border-right: 1px solid rgba(232,228,223,0.08);
+  }
+
+  .col-top {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .logo img {
+    width: 5rem;
+    height: auto;
+  }
+
+  .meta-line {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.26rem;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    opacity: 0.3;
+  }
+
+  .meta-line .dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: rgba(232,228,223,0.3);
+  }
+
+  /* Headline */
+  .col-headline h1 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 1.55rem;
+    line-height: 1.1;
+    letter-spacing: -0.005em;
+    color: #f5f2ee;
+    margin-bottom: 0.5rem;
+  }
+
+  .col-headline .deck {
+    font-weight: 300;
+    font-size: 0.38rem;
+    line-height: 1.8;
+    letter-spacing: 0.03em;
+    opacity: 0.55;
+  }
+
+  /* Stats */
+  .proof-strip {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 0.6rem;
+    border-top: 1px solid rgba(232,228,223,0.08);
+  }
+
+  .proof {
+    text-align: center;
+  }
+
+  .proof .number {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: #f5f2ee;
+    line-height: 1;
+    margin-bottom: 0.15rem;
+  }
+
+  .proof .label {
+    font-size: 0.24rem;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    opacity: 0.35;
+    line-height: 1.5;
+  }
+
+  /* CTA */
+  .col-cta {
+    padding-top: 0.55rem;
+    border-top: 1px solid rgba(232,228,223,0.08);
+  }
+
+  .col-cta .cta-label {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 0.42rem;
+    opacity: 0.7;
+    margin-bottom: 0.2rem;
+  }
+
+  .col-cta .phone {
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    font-size: 0.65rem;
+    letter-spacing: 0.03em;
+    color: #f5f2ee;
+    margin-bottom: 0.12rem;
+  }
+
+  .col-cta .fine {
+    font-size: 0.26rem;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    opacity: 0.3;
+  }
+
+  /* ---- RIGHT: Image mosaic ---- */
+  .mosaic {
+    width: 58%;
+    height: 100%;
+    position: relative;
+    padding: 3px;
+  }
+
+  .mosaic-item {
+    position: absolute;
+    overflow: hidden;
+    border-radius: 3px;
+  }
+
+  .mosaic-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .mosaic-item::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(10,10,10,0.55) 0%,
+      rgba(10,10,10,0.05) 40%,
+      transparent 100%
+    );
+  }
+
+  .mosaic-label {
+    position: absolute;
+    bottom: 0.45rem;
+    left: 0.5rem;
+    z-index: 2;
+  }
+
+  .mosaic-label h3 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 0.46rem;
+    margin-bottom: 0.06rem;
+    color: #f5f2ee;
+  }
+
+  .mosaic-label p {
+    font-size: 0.26rem;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0.55;
+  }
+
+  /* Position mosaic tiles */
+  .m1 { top: 3px; left: 3px; width: calc(50% - 4px); height: calc(60% - 4px); }
+  .m2 { top: 3px; right: 3px; width: calc(50% - 4px); height: calc(60% - 4px); }
+  .m3 { bottom: 3px; left: 3px; right: 3px; width: calc(100% - 6px); height: calc(40% - 4px); }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="text-col">
+
+    <div class="col-top">
+      <div class="logo">
+        <img src="realty-dept-logo.jpg" alt="The Realty Dept.">
+      </div>
+      <div class="meta-line">
+        <span>Singapore</span>
+        <span class="dot"></span>
+        <span>Property Advisory</span>
+        <span class="dot"></span>
+        <span>2026</span>
+      </div>
+    </div>
+
+    <div class="col-headline">
+      <h1>Thinking of Selling? Talk to Us Before You Talk to Anyone.</h1>
+      <p class="deck">The wrong first move costs sellers thousands. We build a strategy around your timeline, your number, and your neighbourhood&mdash;before a single photo is taken.</p>
+    </div>
+
+    <div class="proof-strip">
+      <div class="proof">
+        <div class="number">97%</div>
+        <div class="label">Asking price<br>achieved</div>
+      </div>
+      <div class="proof">
+        <div class="number">21</div>
+        <div class="label">Avg. days<br>on market</div>
+      </div>
+      <div class="proof">
+        <div class="number">$2.4M</div>
+        <div class="label">Sold this<br>quarter</div>
+      </div>
+    </div>
+
+    <div class="col-cta">
+      <div class="cta-label">Your free home valuation is one call away.</div>
+      <div class="phone">+65 9777 7311</div>
+      <div class="fine">No obligation &middot; therealtydept.com</div>
+    </div>
+
+  </div>
+
+  <div class="mosaic">
+    <div class="mosaic-item m1">
+      <img src="still-staging.jpg" alt="">
+      <div class="mosaic-label">
+        <h3>Staged to Sell</h3>
+        <p>Interior styling</p>
+      </div>
+    </div>
+    <div class="mosaic-item m2">
+      <img src="still-lights.jpg" alt="">
+      <div class="mosaic-label">
+        <h3>Every Detail</h3>
+        <p>Cinematic marketing</p>
+      </div>
+    </div>
+    <div class="mosaic-item m3">
+      <img src="still-bridge.jpg" alt="">
+      <div class="mosaic-label">
+        <h3>Prime Locations, Premium Results</h3>
+        <p>Where you want to be</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

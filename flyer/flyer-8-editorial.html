@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Realty Dept. - Editorial 8</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  @page { size: 210mm 148mm; margin: 0; }
+
+  body {
+    width: 210mm;
+    height: 148mm;
+    font-family: 'Inter', sans-serif;
+    background: #0a0a0a;
+    color: #e8e4df;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+
+  /* ---- Full bleed background ---- */
+  .bg {
+    position: absolute;
+    inset: 0;
+  }
+
+  .bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .bg-overlay-v {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background:
+      linear-gradient(to bottom,
+        rgba(10,10,10,0.9) 0%,
+        rgba(10,10,10,0.25) 18%,
+        transparent 35%,
+        transparent 60%,
+        rgba(10,10,10,0.35) 78%,
+        rgba(10,10,10,0.9) 100%
+      );
+  }
+
+  .bg-overlay-h {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background:
+      linear-gradient(to right,
+        rgba(10,10,10,0.45) 0%,
+        transparent 20%,
+        transparent 80%,
+        rgba(10,10,10,0.45) 100%
+      );
+  }
+
+  /* ---- Content ---- */
+  .content {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+  }
+
+  /* Top masthead */
+  .masthead {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid rgba(232,228,223,0.1);
+  }
+
+  .masthead .logo img {
+    width: 5rem;
+    height: auto;
+  }
+
+  .masthead-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .masthead-right .divider {
+    width: 1px;
+    height: 1rem;
+    background: rgba(232,228,223,0.15);
+  }
+
+  .masthead-right .section {
+    font-size: 0.28rem;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    opacity: 0.4;
+  }
+
+  .masthead-right .issue {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 0.34rem;
+    opacity: 0.4;
+  }
+
+  /* Center: headline */
+  .center-spread {
+    text-align: center;
+    padding: 0 2rem;
+  }
+
+  .center-spread .eyebrow {
+    font-size: 0.28rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.28em;
+    opacity: 0.4;
+    margin-bottom: 0.65rem;
+  }
+
+  .center-spread h1 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 2.6rem;
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+    color: #f5f2ee;
+    margin-bottom: 0.55rem;
+  }
+
+  .center-spread .rule {
+    width: 2.5rem;
+    height: 1px;
+    background: rgba(232,228,223,0.25);
+    margin: 0 auto 0.55rem;
+  }
+
+  .center-spread .standfirst {
+    font-weight: 300;
+    font-size: 0.42rem;
+    line-height: 1.8;
+    letter-spacing: 0.04em;
+    opacity: 0.65;
+    max-width: 75%;
+    margin: 0 auto;
+  }
+
+  /* Bottom bar */
+  .bottom-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding-top: 0.6rem;
+    border-top: 1px solid rgba(232,228,223,0.1);
+  }
+
+  .cta-block {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+  }
+
+  .cta-block .label {
+    font-size: 0.28rem;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    opacity: 0.35;
+  }
+
+  .cta-block .phone {
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    font-size: 0.6rem;
+    letter-spacing: 0.03em;
+    color: #f5f2ee;
+  }
+
+  .bottom-right {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+
+  .bottom-right .note {
+    font-size: 0.26rem;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    opacity: 0.3;
+    text-align: right;
+    line-height: 1.7;
+  }
+
+  .qr-placeholder {
+    width: 1.8rem;
+    height: 1.8rem;
+    border: 1px solid rgba(232,228,223,0.12);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.22rem;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0.25;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="bg">
+    <img src="still-bridge.jpg" alt="">
+    <div class="bg-overlay-v"></div>
+    <div class="bg-overlay-h"></div>
+  </div>
+
+  <div class="content">
+
+    <div class="masthead">
+      <div class="logo">
+        <img src="realty-dept-logo.jpg" alt="The Realty Dept.">
+      </div>
+      <div class="masthead-right">
+        <span class="section">Exclusive Advisory</span>
+        <div class="divider"></div>
+        <span class="issue">Singapore 2026</span>
+      </div>
+    </div>
+
+    <div class="center-spread">
+      <div class="eyebrow">Before You List</div>
+      <h1>Don&rsquo;t Leave<br>Money on the Table.</h1>
+      <div class="rule"></div>
+      <p class="standfirst">The right strategy turns a listing into a bidding war. We combine market intelligence, cinematic presentation, and relentless negotiation to close above asking&mdash;consistently.</p>
+    </div>
+
+    <div class="bottom-bar">
+      <div class="cta-block">
+        <span class="label">Free valuation</span>
+        <span class="phone">+65 9777 7311</span>
+      </div>
+      <div class="bottom-right">
+        <div class="note">
+          No obligation<br>
+          therealtydept.com
+        </div>
+        <div class="qr-placeholder">QR</div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+</body>
+</html>

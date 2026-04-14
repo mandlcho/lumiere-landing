@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Realty Dept. - Flyer 6</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  @page { size: 210mm 148mm; margin: 0; }
+
+  body {
+    width: 210mm;
+    height: 148mm;
+    font-family: 'Inter', sans-serif;
+    background: #000;
+    color: #fff;
+    overflow: hidden;
+  }
+
+  .flyer {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+
+  /* --- Full bleed background --- */
+  .bg {
+    position: absolute;
+    inset: 0;
+  }
+
+  .bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .bg-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to right,
+      rgba(0,0,0,0.92) 0%,
+      rgba(0,0,0,0.65) 30%,
+      rgba(0,0,0,0.15) 55%,
+      rgba(0,0,0,0.1) 75%,
+      rgba(0,0,0,0.5) 100%
+    );
+  }
+
+  .bg-overlay-bottom {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(0,0,0,0.7) 0%,
+      rgba(0,0,0,0.0) 35%
+    );
+  }
+
+  /* --- Content --- */
+  .content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1.3rem 1.5rem;
+  }
+
+  /* --- Top bar --- */
+  .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .logo img {
+    width: 5.5rem;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .tag {
+    font-size: 0.34rem;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    opacity: 0.6;
+    border: 1px solid rgba(255,255,255,0.25);
+    padding: 0.22rem 0.55rem;
+    border-radius: 2px;
+  }
+
+  /* --- Main copy, left-aligned --- */
+  .main {
+    max-width: 50%;
+  }
+
+  .main .eyebrow {
+    font-size: 0.36rem;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    opacity: 0.5;
+    margin-bottom: 0.5rem;
+  }
+
+  .main h1 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 2rem;
+    line-height: 1.1;
+    letter-spacing: 0.01em;
+    margin-bottom: 0.55rem;
+  }
+
+  .main .body-text {
+    font-weight: 300;
+    font-size: 0.42rem;
+    letter-spacing: 0.04em;
+    opacity: 0.8;
+    line-height: 1.75;
+    max-width: 95%;
+  }
+
+  /* --- Bottom bar --- */
+  .bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .cta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .cta .cta-label {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 0.46rem;
+  }
+
+  .cta .phone {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+  }
+
+  .cta .free-line {
+    font-size: 0.3rem;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0.5;
+  }
+
+  .thumbnails {
+    display: flex;
+    gap: 4px;
+  }
+
+  .thumb {
+    width: 3.8rem;
+    height: 2.4rem;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .thumb::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.15);
+  }
+</style>
+</head>
+<body>
+<div class="flyer">
+
+  <div class="bg">
+    <img src="still-bridge.jpg" alt="Cityscape view">
+    <div class="bg-overlay"></div>
+    <div class="bg-overlay-bottom"></div>
+  </div>
+
+  <div class="content">
+
+    <div class="top">
+      <div class="logo">
+        <img src="realty-dept-logo.jpg" alt="The Realty Dept.">
+      </div>
+      <div class="tag">Singapore</div>
+    </div>
+
+    <div class="main">
+      <div class="eyebrow">The Realty Dept.</div>
+      <h1>Don't List Your Home Until You Read This.</h1>
+      <p class="body-text">Most homeowners undervalue their property by 8&ndash;15%. Our team uses market intelligence, cinematic marketing, and relentless negotiation to close above asking&mdash;every time.</p>
+    </div>
+
+    <div class="bottom">
+      <div class="cta">
+        <div class="cta-label">Get your free home valuation today.</div>
+        <div class="phone">+65 9777 7311</div>
+        <div class="free-line">No obligation &middot; No pressure &middot; Just answers</div>
+      </div>
+      <div class="thumbnails">
+        <div class="thumb"><img src="still-staging.jpg" alt="Staging"></div>
+        <div class="thumb"><img src="still-lights.jpg" alt="Lights"></div>
+        <div class="thumb"><img src="still-hero.jpg" alt="Interior"></div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+</body>
+</html>
