@@ -402,6 +402,27 @@
       opacity: 0.25;
     }
 
+    /* ── Hero letter animation ── */
+    .hero-text h2 .letter {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: letterIn 0.5s ease forwards;
+    }
+
+    .hero-text p {
+      opacity: 0;
+      transform: translateY(10px);
+      animation: letterIn 0.6s ease forwards;
+    }
+
+    @keyframes letterIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     /* Visually hidden */
     .sr-only {
       position: absolute;
@@ -433,7 +454,7 @@
       </video>
       <div class="video-overlay"></div>
       <div class="video-text hero-text" data-phase="primary">
-        <h2>Reimagine<br>Every Space</h2>
+        <h2 data-animate-letters="60">Reimagine<br>Every Space</h2>
         <p>Interiors so real, you forget how they got there</p>
       </div>
       <div class="video-content" data-phase="secondary">
@@ -987,6 +1008,29 @@
         startAnimation();
       }, { passive: true });
 
+      // ── Hero letter animation ──
+      function animateLetters(el) {
+        var stagger = parseInt(el.getAttribute('data-animate-letters'), 10) || 60;
+        var html = el.innerHTML;
+        var parts = html.split(/<br\s*\/?>/i);
+        var letterIndex = 0;
+        var result = '';
+
+        parts.forEach(function (part, pi) {
+          if (pi > 0) result += '<br>';
+          for (var i = 0; i < part.length; i++) {
+            var ch = part[i] === ' ' ? '&nbsp;' : part[i];
+            result += '<span class="letter" style="animation-delay:' + (letterIndex * stagger) + 'ms">' + ch + '</span>';
+            letterIndex++;
+          }
+        });
+
+        el.innerHTML = result;
+
+        // Return total duration for subtitle delay
+        return letterIndex * stagger;
+      }
+
       // On load
       window.addEventListener('load', function () {
         lastScrollY = window.scrollY || window.pageYOffset;
@@ -995,6 +1039,17 @@
           sectionLayouts[0].primaryText.style.opacity = 1;
           targetOpacityPrimary.set(sectionLayouts[0].section, 1);
         }
+
+        // Animate hero letters
+        var heroH2 = document.querySelector('[data-animate-letters]');
+        if (heroH2) {
+          var totalMs = animateLetters(heroH2);
+          var heroSub = heroH2.parentElement.querySelector('p');
+          if (heroSub) {
+            heroSub.style.animationDelay = (totalMs + 200) + 'ms';
+          }
+        }
+
         computeScrollState(lastScrollY);
         startAnimation();
       });
