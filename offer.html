@@ -44,7 +44,7 @@
       transform: translateY(-8px);
       transition: opacity 0.8s ease, transform 0.8s ease;
     }
-    body.intro-complete .topbar,
+    body.intro-copy-visible .topbar,
     body.intro-skip .topbar {
       opacity: 1;
       transform: translateY(0);
@@ -117,7 +117,7 @@
       opacity: 0;
       transition: opacity 0.8s ease;
     }
-    body.intro-complete .intro-scrim,
+    body.intro-copy-visible .intro-scrim,
     body.intro-skip .intro-scrim {
       opacity: 1;
     }
@@ -131,7 +131,7 @@
       transform: translateY(22px);
       transition: opacity 1s ease, transform 1s cubic-bezier(0.22, 1, 0.36, 1);
     }
-    body.intro-complete .intro-copy,
+    body.intro-copy-visible .intro-copy,
     body.intro-skip .intro-copy {
       opacity: 1;
       transform: translateY(0);
@@ -707,14 +707,22 @@
       var blackout = document.querySelector('[data-intro-blackout]');
       var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       var introComplete = false;
+      var copyVisible = false;
       var fallbackTimer;
 
       if (!intro || !video || !blackout) return;
+
+      function revealCopy() {
+        if (copyVisible) return;
+        copyVisible = true;
+        document.body.classList.add('intro-copy-visible');
+      }
 
       function setIntroComplete() {
         if (introComplete) return;
         introComplete = true;
         window.clearTimeout(fallbackTimer);
+        revealCopy();
         document.body.classList.add('intro-complete');
         updateBlackout();
       }
@@ -761,6 +769,12 @@
         video.addEventListener('ended', setIntroComplete, { once: true });
         video.addEventListener('error', setIntroComplete, { once: true });
         video.addEventListener('play', setPlaybackSpeed);
+        video.addEventListener('timeupdate', function () {
+          if (!video.duration) return;
+          if ((video.duration - video.currentTime) / video.playbackRate <= 2) {
+            revealCopy();
+          }
+        });
 
         fallbackTimer = window.setTimeout(function () {
           revealVideo();
