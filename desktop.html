@@ -832,6 +832,7 @@
       <div class="video-overlay"></div>
       <div class="video-text" data-phase="primary">
         <h2>Ready to Transform Your Listings?</h2>
+        <p>Send us your listings and we'll craft the cinematic visuals.</p>
       </div>
       <div class="video-content footer-reveal" data-phase="footer">
         <div class="inner">
@@ -1101,7 +1102,7 @@
 
           // ── Fade to black ──
           var fadeBlack = 0;
-          if (rawProgress > 0.75) {
+          if (rawProgress > 0.75 && i !== sectionLayouts.length - 1) {
             fadeBlack = Math.min((rawProgress - 0.75) / 0.20, 1);
           }
           if (i > 0 && rawProgress < 0.08) {
