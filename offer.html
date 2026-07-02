@@ -346,8 +346,17 @@
       grid-template-columns: repeat(3, 1fr);
       gap: clamp(1rem, 2vw, 1.4rem);
     }
+    .transformation-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+      gap: clamp(1.2rem, 3vw, 2rem);
+      align-items: start;
+    }
     .proof-card {
       min-width: 0;
+    }
+    .proof-card.featured {
+      grid-column: auto;
     }
     .proof-frame {
       position: relative;
@@ -385,6 +394,46 @@
     }
     .proof-card h3 { margin-top: 1rem; }
     .proof-card p { margin-top: 0.65rem; }
+    .before-after-frame {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      aspect-ratio: 16 / 10;
+      background: rgba(247,243,237,0.12);
+      border: 1px solid rgba(247,243,237,0.11);
+      overflow: hidden;
+    }
+    .before-after-panel {
+      position: relative;
+      min-width: 0;
+      overflow: hidden;
+      background: #141414;
+    }
+    .before-after-panel img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .before-after-panel::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.58) 100%);
+      pointer-events: none;
+    }
+    .panel-label {
+      position: absolute;
+      z-index: 1;
+      left: 0.9rem;
+      bottom: 0.9rem;
+      color: rgba(247,243,237,0.82);
+      font-size: 0.67rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .landscape-frame {
+      aspect-ratio: 16 / 10;
+    }
     .split {
       display: grid;
       grid-template-columns: minmax(0, 0.72fr) minmax(320px, 0.48fr);
@@ -500,6 +549,9 @@
       .split {
         grid-template-columns: 1fr;
       }
+      .transformation-grid {
+        grid-template-columns: 1fr;
+      }
       .deliverables,
       .proof-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -524,9 +576,17 @@
       .stats,
       .deliverables,
       .proof-grid,
+      .transformation-grid,
       .steps,
       .faq-grid {
         grid-template-columns: 1fr;
+      }
+      .before-after-frame {
+        grid-template-columns: 1fr;
+        aspect-ratio: auto;
+      }
+      .before-after-panel {
+        aspect-ratio: 4 / 5;
       }
       .stat,
       .deliverable,
@@ -628,37 +688,63 @@
       <div class="shell">
         <div class="section-head">
           <div>
-            <p class="eyebrow">Proof of possibility</p>
-            <h2 id="proof-heading">The goal is not decoration. It is buyer imagination.</h2>
+            <p class="eyebrow">Proof of services</p>
+            <h2 id="proof-heading">Before, after, cleanup, transformation, and premium context.</h2>
           </div>
-          <p>Most listings already have enough raw material. The difference is choosing the right mood, angle, pacing, and finish so buyers can understand the property faster.</p>
+          <p>Different listings need different visual help. Sometimes it is restaging a bathroom, sometimes it is making a messy room presentable, and sometimes it is creating expensive-looking location or motion assets around the property.</p>
         </div>
-        <div class="proof-grid">
+        <div class="transformation-grid">
+          <article class="proof-card featured">
+            <div class="before-after-frame" aria-label="Bathroom before and after restyling comparison">
+              <div class="before-after-panel">
+                <img src="proof-bijou-bath-before.png" alt="Original bathroom photo before visual restyling">
+                <span class="panel-label">Before</span>
+              </div>
+              <div class="before-after-panel">
+                <img src="proof-bijou-bath-after.png" alt="Reimagined bathroom after visual restyling">
+                <span class="panel-label">After</span>
+              </div>
+            </div>
+            <h3>Bathroom restyling</h3>
+            <p>Turn an ordinary bathroom photo into a warmer, more editorial visual that helps buyers imagine the space at its best.</p>
+          </article>
+          <article class="proof-card">
+            <div class="proof-frame landscape-frame">
+              <video muted playsinline autoplay loop preload="metadata" poster="proof-pipit-cleanup-poster.jpg">
+                <source src="proof-pipit-cleanup.mp4" type="video/mp4">
+              </video>
+              <div class="proof-badge"><span>Messy</span><span>Tidied</span></div>
+            </div>
+            <h3>Cleanup transformation</h3>
+            <p>Show the same room cleaned, organized, and ready for listing when the original condition distracts from the space.</p>
+          </article>
+        </div>
+        <div class="proof-grid service-proof-grid">
           <article class="proof-card">
             <div class="proof-frame">
-              <img src="flyer/still-staging.jpg" alt="Warm staged interior visualization for real estate marketing">
-              <div class="proof-badge"><span>Before</span><span>Staged</span></div>
+              <img src="proof-after-01.png" alt="Architectural cutaway visualization showing reimagined shophouse interiors">
+              <div class="proof-badge"><span>Shell</span><span>Concept</span></div>
             </div>
-            <h3>Empty to lived-in</h3>
-            <p>Show scale, warmth, and use case when an empty room is asking buyers to do too much work.</p>
+            <h3>Reimagined use cases</h3>
+            <p>Help buyers and landlords understand what a space can become, from layout potential to lifestyle and commercial use.</p>
           </article>
           <article class="proof-card">
             <div class="proof-frame">
               <video muted playsinline autoplay loop preload="metadata" poster="flyer/still-office.jpg">
                 <source src="transform_office.mp4" type="video/mp4">
               </video>
-              <div class="proof-badge"><span>Plain</span><span>Premium</span></div>
+              <div class="proof-badge"><span>Flat</span><span>Motion</span></div>
             </div>
-            <h3>Flat to cinematic</h3>
-            <p>Use motion, lighting, and composition to make a standard property asset feel more intentional.</p>
+            <h3>Cinematic transformations</h3>
+            <p>Use motion, lighting, and composition to make standard property assets feel more intentional and premium.</p>
           </article>
           <article class="proof-card">
             <div class="proof-frame">
-              <img src="flyer/still-lights.jpg" alt="Atmospheric lighting scene for premium property visuals">
-              <div class="proof-badge"><span>Day</span><span>Mood</span></div>
+              <img src="proof-before-02.png" alt="Aerial-style location visual for property context">
+              <div class="proof-badge"><span>Location</span><span>Context</span></div>
             </div>
-            <h3>Ordinary to memorable</h3>
-            <p>Shift the first impression from information-only to atmosphere, especially for social and follow-ups.</p>
+            <h3>Premium aerial context</h3>
+            <p>Create expensive-looking location visuals that help prospects understand the building, neighborhood, and approach.</p>
           </article>
         </div>
       </div>
