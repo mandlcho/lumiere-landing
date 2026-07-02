@@ -139,25 +139,50 @@
       opacity: 0;
       transform: translateY(46px);
     }
+    .intro-copy h1 {
+      opacity: 1;
+      transform: none;
+    }
+    .intro-copy h1 .headline-line {
+      display: block;
+      opacity: 0;
+      transform: translateY(46px);
+    }
     body.intro-copy-visible .intro-copy > *,
     body.intro-skip .intro-copy > * {
       animation: introTextIn 1.15s cubic-bezier(0.16, 1, 0.3, 1) both;
     }
+    body.intro-copy-visible .intro-copy h1,
+    body.intro-skip .intro-copy h1 {
+      animation: none;
+    }
+    body.intro-copy-visible .intro-copy h1 .headline-line,
+    body.intro-skip .intro-copy h1 .headline-line {
+      animation: introTextIn 1.15s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    body.intro-copy-visible .intro-copy h1 .headline-line:first-child,
+    body.intro-skip .intro-copy h1 .headline-line:first-child {
+      animation-delay: 0.12s;
+    }
+    body.intro-copy-visible .intro-copy h1 .headline-line:last-child,
+    body.intro-skip .intro-copy h1 .headline-line:last-child {
+      animation-delay: 0.38s;
+    }
     body.intro-copy-visible .intro-copy > :nth-child(2),
     body.intro-skip .intro-copy > :nth-child(2) {
-      animation-delay: 0.12s;
+      animation-delay: 0s;
     }
     body.intro-copy-visible .intro-copy > :nth-child(3),
     body.intro-skip .intro-copy > :nth-child(3) {
-      animation-delay: 0.24s;
+      animation-delay: 0.78s;
     }
     body.intro-copy-visible .intro-copy > :nth-child(4),
     body.intro-skip .intro-copy > :nth-child(4) {
-      animation-delay: 0.34s;
+      animation-delay: 0.98s;
     }
     body.intro-copy-visible .intro-copy > :nth-child(5),
     body.intro-skip .intro-copy > :nth-child(5) {
-      animation-delay: 0.44s;
+      animation-delay: 1.12s;
     }
     @keyframes introTextIn {
       from {
@@ -170,7 +195,8 @@
       }
     }
     @media (prefers-reduced-motion: reduce) {
-      .intro-copy > * {
+      .intro-copy > *,
+      .intro-copy h1 .headline-line {
         opacity: 1;
         transform: none;
         animation: none;
@@ -538,7 +564,7 @@
         <div class="intro-blackout" data-intro-blackout></div>
         <div class="shell hero-copy intro-copy">
           <p class="eyebrow">Free listing audit</p>
-          <h1 id="offer-heading">Send one listing. Get three visual fixes.</h1>
+          <h1 id="offer-heading"><span class="headline-line">Send one listing.</span><span class="headline-line">Get three visual fixes.</span></h1>
           <p class="lede">A fast, practical review for agents who want their property to look more premium online. Send a listing link, floor plan, or photos and we will point out the strongest visual opportunity before you spend on production.</p>
           <div class="hero-actions">
             <a class="cta-button" href="https://wa.me/6597777311?text=LISTING%20-%20I%27d%20like%20a%20free%20visual%20audit" target="_blank" rel="noopener">WhatsApp LISTING</a>
