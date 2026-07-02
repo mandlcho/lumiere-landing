@@ -3,204 +3,482 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Offer & Proof — LumiereMotionLabs</title>
-  <meta name="description" content="Free listing visual audit from LumiereMotionLabs. Send a listing link or property photos and get three visual fixes for stronger real estate marketing.">
-  <meta name="theme-color" content="#000000">
+  <title>Offer & Proof - LumiereMotionLabs</title>
+  <meta name="description" content="Send LumiereMotionLabs one listing and get a free visual audit with three specific fixes for stronger real estate marketing.">
+  <meta name="theme-color" content="#050505">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { background: #000; scroll-behavior: smooth; }
+    html { background: #050505; scroll-behavior: smooth; }
     body {
       min-height: 100vh;
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      color: #fff;
-      background:
-        radial-gradient(circle at 18% 18%, rgba(255,255,255,0.10), transparent 24rem),
-        radial-gradient(circle at 82% 4%, rgba(194,170,125,0.14), transparent 28rem),
-        linear-gradient(180deg, #050505 0%, #000 55%, #050505 100%);
+      color: #f7f3ed;
+      background: #050505;
       font-weight: 300;
-      letter-spacing: 0.02em;
+      letter-spacing: 0;
     }
     a { color: inherit; }
+    img, video { display: block; max-width: 100%; }
     .page {
-      width: min(1120px, calc(100% - 2rem));
+      overflow: hidden;
+    }
+    .shell {
+      width: min(1180px, calc(100% - 2rem));
       margin: 0 auto;
-      padding: 2rem 0 4rem;
     }
     .topbar {
+      position: absolute;
+      z-index: 4;
+      top: 0;
+      left: 0;
+      right: 0;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 1rem;
-      padding: 1rem 0 3rem;
+      padding: 1.15rem max(1rem, calc((100vw - 1180px) / 2)) 0;
+      opacity: 0;
+      transform: translateY(-8px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    body.intro-complete .topbar,
+    body.intro-skip .topbar {
+      opacity: 1;
+      transform: translateY(0);
     }
     .brand {
       font-family: 'Playfair Display', Georgia, serif;
       font-style: italic;
-      font-size: 1.1rem;
+      font-size: clamp(1rem, 2vw, 1.2rem);
       text-decoration: none;
-      opacity: 0.86;
+      text-shadow: 0 1px 18px rgba(0,0,0,0.55);
+    }
+    .back-link,
+    .eyebrow,
+    .mini-label,
+    .step-number,
+    .faq-term {
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
     }
     .back-link {
-      font-size: 0.68rem;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
       text-decoration: none;
-      opacity: 0.62;
+      color: rgba(247,243,237,0.72);
+      white-space: nowrap;
     }
-    .hero {
-      padding: clamp(2rem, 7vw, 5rem) 0 3rem;
-      max-width: 920px;
+    .intro-sequence {
+      position: relative;
+      height: 195svh;
+      background: #050505;
+      isolation: isolate;
+    }
+    .intro-sticky {
+      position: sticky;
+      top: 0;
+      min-height: 100svh;
+      display: grid;
+      align-items: end;
+      overflow: hidden;
+      isolation: isolate;
+      padding: 7rem 0 4.5rem;
+    }
+    .intro-video {
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      width: 100%;
+      height: 100%;
+      max-width: none;
+      object-fit: cover;
+      object-position: center;
+      opacity: 0;
+      filter: saturate(0.92) contrast(1.04);
+      transition: opacity 1.15s ease;
+    }
+    body.intro-video-visible .intro-video,
+    body.intro-skip .intro-video {
+      opacity: 1;
+    }
+    .intro-scrim,
+    .intro-blackout {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+    }
+    .intro-scrim {
+      background:
+        linear-gradient(90deg, rgba(5,5,5,0.90) 0%, rgba(5,5,5,0.54) 43%, rgba(5,5,5,0.18) 100%),
+        linear-gradient(180deg, rgba(5,5,5,0.38) 0%, rgba(5,5,5,0.05) 48%, rgba(5,5,5,0.58) 100%);
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+    body.intro-complete .intro-scrim,
+    body.intro-skip .intro-scrim {
+      opacity: 1;
+    }
+    .intro-blackout {
+      background: #050505;
+      opacity: var(--intro-blackout, 0);
+    }
+    .hero-copy { max-width: 850px; }
+    .intro-copy {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 1s ease, transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    body.intro-complete .intro-copy,
+    body.intro-skip .intro-copy {
+      opacity: 1;
+      transform: translateY(0);
     }
     .eyebrow {
-      font-size: 0.68rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.52);
+      color: rgba(247,243,237,0.58);
       margin-bottom: 1rem;
     }
     h1, h2, h3 {
       font-family: 'Playfair Display', Georgia, serif;
       font-weight: 400;
-      line-height: 1.04;
+      line-height: 1.02;
+      font-style: italic;
     }
     h1 {
-      font-size: clamp(3rem, 9vw, 7rem);
-      letter-spacing: -0.045em;
-      max-width: 980px;
+      max-width: 900px;
+      font-size: clamp(3.5rem, 9vw, 7.4rem);
+    }
+    h2 {
+      font-size: clamp(2.35rem, 5.7vw, 5.4rem);
+      max-width: 900px;
+    }
+    h3 {
+      font-size: clamp(1.35rem, 2.8vw, 2rem);
     }
     .lede {
-      margin-top: 1.5rem;
-      max-width: 760px;
-      font-size: clamp(1rem, 2vw, 1.25rem);
-      line-height: 1.85;
-      color: rgba(255,255,255,0.72);
+      margin-top: 1.35rem;
+      max-width: 680px;
+      font-size: clamp(1rem, 1.8vw, 1.22rem);
+      line-height: 1.75;
+      color: rgba(247,243,237,0.76);
+    }
+    .hero-actions,
+    .cta-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 2rem;
     }
     .cta-button {
-      display: inline-block;
-      margin-top: 2rem;
-      padding: 0.95rem 1.6rem;
-      min-height: 48px;
-      min-width: 48px;
-      color: #000;
-      background: #fff;
-      border: 1px solid rgba(255,255,255,0.8);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 50px;
+      padding: 0.95rem 1.35rem;
+      color: #070707;
+      background: #f8f3e8;
+      border: 1px solid rgba(248,243,232,0.82);
       text-decoration: none;
       text-transform: uppercase;
-      letter-spacing: 0.18em;
+      letter-spacing: 0.13em;
       font-size: 0.72rem;
       font-weight: 500;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
     }
-    .cta-button:hover { transform: translateY(-2px); box-shadow: 0 18px 50px rgba(255,255,255,0.12); }
+    .cta-button:hover {
+      transform: translateY(-2px);
+      background: #fff;
+      box-shadow: 0 18px 50px rgba(248,243,232,0.14);
+    }
+    .secondary-link {
+      min-height: 50px;
+      display: inline-flex;
+      align-items: center;
+      color: rgba(247,243,237,0.74);
+      text-decoration: none;
+      font-size: 0.82rem;
+    }
     .note {
       margin-top: 1rem;
-      font-size: 0.7rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.42);
+      color: rgba(247,243,237,0.56);
+      font-size: 0.85rem;
+      line-height: 1.55;
     }
-    .section {
-      margin-top: 2.4rem;
-      padding: clamp(1.2rem, 3vw, 2rem);
-      border: 1px solid rgba(255,255,255,0.11);
-      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.025));
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
-    }
-    .section h2 {
-      font-size: clamp(2rem, 5vw, 4rem);
-      margin-bottom: 1rem;
-    }
-    .grid {
+    .stats {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
-      margin-top: 1.5rem;
+      gap: 1px;
+      background: rgba(247,243,237,0.13);
+      border-top: 1px solid rgba(247,243,237,0.13);
+      border-bottom: 1px solid rgba(247,243,237,0.13);
     }
-    .audit-grid { grid-template-columns: repeat(4, 1fr); }
-    .card {
-      min-height: 150px;
-      padding: 1.25rem;
-      border: 1px solid rgba(255,255,255,0.10);
-      background: rgba(0,0,0,0.35);
+    .stat {
+      min-height: 132px;
+      padding: clamp(1rem, 3vw, 2rem);
+      background: #080808;
     }
-    .card h3 {
-      font-size: 1.25rem;
-      font-style: italic;
-      margin-bottom: 0.7rem;
+    .stat strong {
+      display: block;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 400;
+      line-height: 1;
     }
-    .card p, .section p {
-      line-height: 1.75;
-      color: rgba(255,255,255,0.68);
-    }
-    .audit-item {
-      padding: 1rem;
-      border: 1px solid rgba(255,255,255,0.10);
-      background: rgba(255,255,255,0.035);
-      font-size: 0.68rem;
+    .stat span {
+      display: block;
+      margin-top: 0.8rem;
+      max-width: 240px;
+      color: rgba(247,243,237,0.66);
       line-height: 1.55;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.70);
+      font-size: 0.9rem;
     }
-    .proof-media {
+    .band {
+      padding: clamp(4rem, 8vw, 7rem) 0;
+      border-bottom: 1px solid rgba(247,243,237,0.10);
+      background: #050505;
+    }
+    .band.alt { background: #0a0a0a; }
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(280px, 0.55fr);
+      gap: clamp(2rem, 6vw, 5rem);
+      align-items: end;
+      margin-bottom: clamp(2rem, 5vw, 4rem);
+    }
+    .section-head p,
+    .text-col p:not(.eyebrow),
+    .proof-card > p,
+    .step > p:not(.step-number),
+    .faq > p:not(.faq-term) {
+      line-height: 1.75;
+      color: rgba(247,243,237,0.68);
+    }
+    .deliverables {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid rgba(247,243,237,0.13);
+      border-left: 1px solid rgba(247,243,237,0.13);
+    }
+    .deliverable {
+      min-height: 210px;
+      padding: clamp(1.1rem, 2.4vw, 1.6rem);
+      border-right: 1px solid rgba(247,243,237,0.13);
+      border-bottom: 1px solid rgba(247,243,237,0.13);
+      background: rgba(255,255,255,0.025);
+    }
+    .deliverable h3 { margin: 2.4rem 0 0.75rem; }
+    .mini-label,
+    .step-number,
+    .faq-term {
+      color: rgba(247,243,237,0.48);
+    }
+    .proof-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(1rem, 2vw, 1.4rem);
+    }
+    .proof-card {
+      min-width: 0;
+    }
+    .proof-frame {
       position: relative;
-      height: 170px;
-      margin-bottom: 1rem;
-      border: 1px solid rgba(255,255,255,0.10);
-      background:
-        linear-gradient(135deg, rgba(255,255,255,0.11), rgba(255,255,255,0.025) 52%, rgba(255,255,255,0.075)),
-        radial-gradient(circle at 28% 28%, rgba(255,255,255,0.18), transparent 7.5rem),
-        radial-gradient(circle at 82% 18%, rgba(194,170,125,0.16), transparent 8rem),
-        linear-gradient(180deg, #161616 0%, #090909 100%);
+      aspect-ratio: 4 / 5;
       overflow: hidden;
+      background: #141414;
+      border: 1px solid rgba(247,243,237,0.11);
     }
-    .proof-media::after {
+    .proof-frame img,
+    .proof-frame video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .proof-frame::after {
       content: '';
       position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 50%;
-      width: 1px;
-      background: linear-gradient(180deg, transparent, rgba(255,255,255,0.18), transparent);
+      inset: 0;
+      background: linear-gradient(180deg, transparent 45%, rgba(0,0,0,0.68) 100%);
+      pointer-events: none;
     }
-    .proof-labels {
+    .proof-badge {
       position: absolute;
       z-index: 1;
-      top: 0.75rem;
-      left: 0.85rem;
-      right: 0.85rem;
+      left: 1rem;
+      bottom: 1rem;
+      right: 1rem;
       display: flex;
       justify-content: space-between;
-      font-size: 0.54rem;
-      letter-spacing: 0.16em;
+      gap: 1rem;
+      color: rgba(247,243,237,0.78);
+      font-size: 0.67rem;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.46);
     }
-    .proof-media span {
-      position: absolute;
-      z-index: 1;
-      left: 0;
-      right: 0;
-      bottom: 0.85rem;
-      text-align: center;
-      font-size: 0.58rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.48);
+    .proof-card h3 { margin-top: 1rem; }
+    .proof-card p { margin-top: 0.65rem; }
+    .split {
+      display: grid;
+      grid-template-columns: minmax(0, 0.72fr) minmax(320px, 0.48fr);
+      gap: clamp(2rem, 6vw, 5rem);
+      align-items: start;
+    }
+    .feature-video {
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      border: 1px solid rgba(247,243,237,0.11);
+      background: #111;
+    }
+    .feature-video video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .text-col h2 { margin-bottom: 1.2rem; }
+    .included-list {
+      display: grid;
+      gap: 1px;
+      margin-top: 2rem;
+      background: rgba(247,243,237,0.13);
+      border: 1px solid rgba(247,243,237,0.13);
+    }
+    .included-list li {
+      list-style: none;
+      padding: 1rem;
+      background: #0a0a0a;
+      color: rgba(247,243,237,0.74);
+      line-height: 1.55;
+    }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: rgba(247,243,237,0.13);
+      border: 1px solid rgba(247,243,237,0.13);
+    }
+    .step {
+      min-height: 230px;
+      padding: clamp(1.2rem, 3vw, 2rem);
+      background: #050505;
+    }
+    .step h3 { margin: 2.8rem 0 0.8rem; }
+    .faq-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1px;
+      background: rgba(247,243,237,0.13);
+      border: 1px solid rgba(247,243,237,0.13);
+    }
+    .faq {
+      min-height: 180px;
+      padding: clamp(1.2rem, 3vw, 1.8rem);
+      background: #0a0a0a;
+    }
+    .faq h3 {
+      margin: 1.1rem 0 0.7rem;
+      font-size: clamp(1.25rem, 2.2vw, 1.75rem);
     }
     .final {
+      position: relative;
+      min-height: 72svh;
+      display: grid;
+      align-items: center;
       text-align: center;
-      padding: 4rem 0 1rem;
+      isolation: isolate;
+      padding: 5rem 0;
     }
-    .final h2 { font-size: clamp(2rem, 6vw, 4.5rem); }
-    @media (max-width: 820px) {
-      .topbar { padding-bottom: 1.5rem; }
-      .grid, .audit-grid { grid-template-columns: 1fr; }
-      .hero { padding-top: 2rem; }
-      .section { margin-top: 1.25rem; }
+    .final::before,
+    .final::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+    }
+    .final::before {
+      background:
+        linear-gradient(180deg, #050505 0%, rgba(5,5,5,0.30) 45%, #050505 100%),
+        linear-gradient(90deg, rgba(5,5,5,0.78), rgba(5,5,5,0.26), rgba(5,5,5,0.78));
+    }
+    .final::after {
+      background-image: url('flyer/still-lights.jpg');
+      background-size: cover;
+      background-position: center;
+      z-index: -2;
+      opacity: 0.78;
+    }
+    .final .shell {
+      display: grid;
+      justify-items: center;
+    }
+    .final .cta-row {
+      justify-content: center;
+      width: min(360px, 100%);
+    }
+    .final p {
+      max-width: 620px;
+      margin-top: 1rem;
+      color: rgba(247,243,237,0.72);
+      line-height: 1.7;
+    }
+    footer {
+      padding: 1.4rem 0 2rem;
+      color: rgba(247,243,237,0.42);
+      font-size: 0.78rem;
+      background: #050505;
+    }
+    @media (max-width: 980px) {
+      .section-head,
+      .split {
+        grid-template-columns: 1fr;
+      }
+      .deliverables,
+      .proof-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 680px) {
+      .topbar {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+      .intro-sequence {
+        height: 185svh;
+      }
+      .intro-sticky {
+        padding-bottom: 3rem;
+      }
+      .intro-scrim {
+        background:
+          linear-gradient(180deg, rgba(5,5,5,0.48) 0%, rgba(5,5,5,0.22) 34%, #050505 100%),
+          linear-gradient(90deg, rgba(5,5,5,0.84), rgba(5,5,5,0.35));
+      }
+      .stats,
+      .deliverables,
+      .proof-grid,
+      .steps,
+      .faq-grid {
+        grid-template-columns: 1fr;
+      }
+      .stat,
+      .deliverable,
+      .step,
+      .faq {
+        min-height: auto;
+      }
+      .cta-button,
+      .secondary-link {
+        width: 100%;
+      }
+      .hero-actions,
+      .cta-row {
+        align-items: stretch;
+      }
+      h1 {
+        font-size: clamp(3rem, 16vw, 4.7rem);
+      }
     }
   </style>
 </head>
@@ -211,62 +489,290 @@
       <a class="back-link" href="index.html">Back to experience</a>
     </nav>
 
-    <section class="hero" aria-labelledby="offer-heading">
-      <p class="eyebrow">Clear offer</p>
-      <h1 id="offer-heading">Send us your listing. Get 3 visual fixes.</h1>
-      <p class="lede">Not sure what your listing needs? Send a listing link or property photos and we’ll identify the strongest visual hook, what makes it feel flat, and which upgrade would make it look more premium online.</p>
-      <a class="cta-button" href="https://wa.me/6597777311?text=LISTING%20-%20I%27d%20like%20a%20free%20visual%20audit" target="_blank" rel="noopener">WhatsApp LISTING</a>
-      <p class="note">Free first step. No pressure, no bloated proposal.</p>
-    </section>
-
-    <section class="section" aria-labelledby="audit-heading">
-      <p class="eyebrow">What you get</p>
-      <h2 id="audit-heading">A simple visual audit for one listing.</h2>
-      <div class="grid audit-grid" aria-label="What the audit includes">
-        <div class="audit-item">3 specific visual improvements</div>
-        <div class="audit-item">Best hero angle for the listing</div>
-        <div class="audit-item">Staging or restyling recommendation</div>
-        <div class="audit-item">Best format for IG, WhatsApp or portals</div>
+    <section class="intro-sequence" data-offer-intro aria-labelledby="offer-heading">
+      <div class="intro-sticky">
+        <video class="intro-video" data-intro-video muted playsinline preload="auto" poster="offer-intro-boon-tat-poster.jpg">
+          <source src="offer-intro-boon-tat.mp4" type="video/mp4">
+        </video>
+        <div class="intro-scrim"></div>
+        <div class="intro-blackout" data-intro-blackout></div>
+        <div class="shell hero-copy intro-copy">
+          <p class="eyebrow">Free listing audit</p>
+          <h1 id="offer-heading">Send one listing. Get three visual fixes.</h1>
+          <p class="lede">A fast, practical review for agents who want their property to look more premium online. Send a listing link, floor plan, or photos and we will point out the strongest visual opportunity before you spend on production.</p>
+          <div class="hero-actions">
+            <a class="cta-button" href="https://wa.me/6597777311?text=LISTING%20-%20I%27d%20like%20a%20free%20visual%20audit" target="_blank" rel="noopener">WhatsApp LISTING</a>
+            <a class="secondary-link" href="#proof">See proof of work</a>
+          </div>
+          <p class="note">No pitch deck. No generic checklist. Just the first three fixes we would make.</p>
+        </div>
       </div>
     </section>
 
-    <section class="section" aria-labelledby="proof-heading">
-      <p class="eyebrow">Proof of possibility</p>
-      <h2 id="proof-heading">Before buyers visit, let them feel the finished space.</h2>
-      <p>Lumiere turns flat listing assets into polished, mood-led visuals that help agents show potential faster — from styling empty rooms to crafting premium twilight and social-ready shots.</p>
-      <div class="grid">
-        <article class="card">
-          <div class="proof-media" aria-label="Before and after placeholder for virtual staging">
-            <div class="proof-labels"><b>Before</b><b>After</b></div>
-            <span>Room staging</span>
+    <section class="stats" aria-label="Offer summary">
+      <div class="stat">
+        <strong>3</strong>
+        <span>specific improvements for one live or upcoming listing.</span>
+      </div>
+      <div class="stat">
+        <strong>24h</strong>
+        <span>typical first reply window after we receive usable materials.</span>
+      </div>
+      <div class="stat">
+        <strong>$0</strong>
+        <span>for the first audit. Production is optional after the review.</span>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="audit-heading">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">What you get</p>
+            <h2 id="audit-heading">A focused audit for the listing in front of you.</h2>
           </div>
-          <h3>Empty to buyer-ready</h3>
-          <p>Turn a bare condo bedroom into a warm, furnished master suite that feels ready to live in.</p>
-        </article>
-        <article class="card">
-          <div class="proof-media" aria-label="Before and after placeholder for twilight transformation">
-            <div class="proof-labels"><b>Day</b><b>Twilight</b></div>
-            <span>Twilight mood</span>
+          <p>We look at the actual assets you have, then identify what would make the listing feel clearer, warmer, and more valuable at first glance.</p>
+        </div>
+        <div class="deliverables">
+          <article class="deliverable">
+            <p class="mini-label">01</p>
+            <h3>Hero angle</h3>
+            <p>Which shot should lead the listing and why it is likely to stop the scroll.</p>
+          </article>
+          <article class="deliverable">
+            <p class="mini-label">02</p>
+            <h3>Visual problem</h3>
+            <p>The specific thing making the property feel flat, empty, dark, cramped, or unfinished.</p>
+          </article>
+          <article class="deliverable">
+            <p class="mini-label">03</p>
+            <h3>Upgrade path</h3>
+            <p>Whether staging, restyling, lighting work, a twilight look, or motion will help most.</p>
+          </article>
+          <article class="deliverable">
+            <p class="mini-label">04</p>
+            <h3>Format plan</h3>
+            <p>What should be made for portals, Instagram, WhatsApp follow-ups, or agent outreach.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="band alt" id="proof" aria-labelledby="proof-heading">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Proof of possibility</p>
+            <h2 id="proof-heading">The goal is not decoration. It is buyer imagination.</h2>
           </div>
-          <h3>Day to twilight</h3>
-          <p>Convert flat daytime exteriors into premium evening hero shots for stronger first impressions.</p>
-        </article>
-        <article class="card">
-          <div class="proof-media" aria-label="Before and after placeholder for social teaser">
-            <div class="proof-labels"><b>Photo</b><b>Teaser</b></div>
-            <span>Social teaser</span>
+          <p>Most listings already have enough raw material. The difference is choosing the right mood, angle, pacing, and finish so buyers can understand the property faster.</p>
+        </div>
+        <div class="proof-grid">
+          <article class="proof-card">
+            <div class="proof-frame">
+              <img src="flyer/still-staging.jpg" alt="Warm staged interior visualization for real estate marketing">
+              <div class="proof-badge"><span>Before</span><span>Staged</span></div>
+            </div>
+            <h3>Empty to lived-in</h3>
+            <p>Show scale, warmth, and use case when an empty room is asking buyers to do too much work.</p>
+          </article>
+          <article class="proof-card">
+            <div class="proof-frame">
+              <video muted playsinline autoplay loop preload="metadata" poster="flyer/still-office.jpg">
+                <source src="transform_office.mp4" type="video/mp4">
+              </video>
+              <div class="proof-badge"><span>Plain</span><span>Premium</span></div>
+            </div>
+            <h3>Flat to cinematic</h3>
+            <p>Use motion, lighting, and composition to make a standard property asset feel more intentional.</p>
+          </article>
+          <article class="proof-card">
+            <div class="proof-frame">
+              <img src="flyer/still-lights.jpg" alt="Atmospheric lighting scene for premium property visuals">
+              <div class="proof-badge"><span>Day</span><span>Mood</span></div>
+            </div>
+            <h3>Ordinary to memorable</h3>
+            <p>Shift the first impression from information-only to atmosphere, especially for social and follow-ups.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="production-heading">
+      <div class="shell split">
+        <div class="feature-video" aria-label="Cinematic real estate motion sample">
+          <video muted playsinline autoplay loop preload="metadata" poster="flyer/still-hero.jpg">
+            <source src="background.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="text-col">
+          <p class="eyebrow">After the audit</p>
+          <h2 id="production-heading">If the fix is worth making, we can produce it.</h2>
+          <p>The audit tells you what should change first. If you want us to execute, we can turn listing photos, rooms, and property moments into a tighter visual package.</p>
+          <ul class="included-list" aria-label="Production options">
+            <li>Virtual staging for empty or under-furnished rooms</li>
+            <li>Room restyling and mood-led interior treatments</li>
+            <li>Twilight, ambience, and lighting-led hero visuals</li>
+            <li>Short cinematic clips for Reels, WhatsApp, and portals</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="band alt" aria-labelledby="process-heading">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">How it works</p>
+            <h2 id="process-heading">Three steps. No meeting required.</h2>
           </div>
-          <h3>Photo to social teaser</h3>
-          <p>Shape ordinary listing photos into cinematic visuals built for Reels, WhatsApp follow-ups, and property portals.</p>
-        </article>
+          <p>Keep it lightweight. The first goal is to decide whether your listing has a visual opportunity worth improving.</p>
+        </div>
+        <div class="steps">
+          <article class="step">
+            <p class="step-number">Step 01</p>
+            <h3>Send the listing</h3>
+            <p>Share a property link, photos, floor plan, or a short note about the listing challenge.</p>
+          </article>
+          <article class="step">
+            <p class="step-number">Step 02</p>
+            <h3>Get the fixes</h3>
+            <p>We reply with three practical visual changes and the order we would tackle them.</p>
+          </article>
+          <article class="step">
+            <p class="step-number">Step 03</p>
+            <h3>Decide the next move</h3>
+            <p>Use the advice yourself, or ask us to create the visuals that will lift the listing.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="faq-heading">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Useful answers</p>
+            <h2 id="faq-heading">What agents usually ask first.</h2>
+          </div>
+          <p>The audit is deliberately small. It is meant to remove uncertainty before you commit to a bigger visual package.</p>
+        </div>
+        <div class="faq-grid">
+          <article class="faq">
+            <p class="faq-term">Materials</p>
+            <h3>What should I send?</h3>
+            <p>A listing link is enough to start. Photos, a floor plan, target buyer profile, or a rough deadline will make the feedback sharper.</p>
+          </article>
+          <article class="faq">
+            <p class="faq-term">Listings</p>
+            <h3>Can I send an upcoming listing?</h3>
+            <p>Yes. Early is better if you are deciding what visuals to prepare before launch.</p>
+          </article>
+          <article class="faq">
+            <p class="faq-term">Output</p>
+            <h3>Is the audit a finished design?</h3>
+            <p>No. It is a short recommendation. Finished visuals are a separate production step if you want us to make them.</p>
+          </article>
+          <article class="faq">
+            <p class="faq-term">Cost</p>
+            <h3>Is there a catch?</h3>
+            <p>No. The first audit is free because it helps both sides see whether the listing has a strong visual opportunity.</p>
+          </article>
+        </div>
       </div>
     </section>
 
     <section class="final" aria-labelledby="final-heading">
-      <p class="eyebrow">One obvious CTA</p>
-      <h2 id="final-heading">Send the listing. We’ll tell you what to fix first.</h2>
-      <a class="cta-button" href="https://wa.me/6597777311?text=LISTING%20-%20I%27d%20like%20a%20free%20visual%20audit" target="_blank" rel="noopener">WhatsApp LISTING</a>
+      <div class="shell">
+        <p class="eyebrow">One obvious CTA</p>
+        <h2 id="final-heading">Send the listing. We will tell you what to fix first.</h2>
+        <p>Drop the link on WhatsApp. We will review the visuals and reply with the first three changes we would make.</p>
+        <div class="cta-row">
+          <a class="cta-button" href="https://wa.me/6597777311?text=LISTING%20-%20I%27d%20like%20a%20free%20visual%20audit" target="_blank" rel="noopener">WhatsApp LISTING</a>
+        </div>
+      </div>
     </section>
   </main>
+
+  <footer>
+    <div class="shell">LumiereMotionLabs - Cinematic real estate visualization</div>
+  </footer>
+
+  <script>
+    (function () {
+      'use strict';
+
+      var intro = document.querySelector('[data-offer-intro]');
+      var video = document.querySelector('[data-intro-video]');
+      var blackout = document.querySelector('[data-intro-blackout]');
+      var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var introComplete = false;
+      var fallbackTimer;
+
+      if (!intro || !video || !blackout) return;
+
+      function setIntroComplete() {
+        if (introComplete) return;
+        introComplete = true;
+        window.clearTimeout(fallbackTimer);
+        document.body.classList.add('intro-complete');
+        updateBlackout();
+      }
+
+      function revealVideo() {
+        document.body.classList.add('intro-video-visible');
+      }
+
+      function setPlaybackSpeed() {
+        video.playbackRate = 1.7;
+      }
+
+      function updateBlackout() {
+        if (!introComplete && !document.body.classList.contains('intro-skip')) {
+          intro.style.setProperty('--intro-blackout', '0');
+          return;
+        }
+
+        var introTop = intro.offsetTop;
+        var scrollable = Math.max(1, intro.offsetHeight - window.innerHeight);
+        var progress = Math.min(1, Math.max(0, (window.scrollY - introTop) / scrollable));
+        var fadeStart = 0.52;
+        var fadeEnd = 0.88;
+        var amount = Math.min(1, Math.max(0, (progress - fadeStart) / (fadeEnd - fadeStart)));
+        intro.style.setProperty('--intro-blackout', amount.toFixed(3));
+      }
+
+      if (prefersReducedMotion) {
+        document.body.classList.add('intro-skip', 'intro-video-visible');
+        video.pause();
+        updateBlackout();
+      } else {
+        video.addEventListener('loadeddata', function () {
+          setPlaybackSpeed();
+          revealVideo();
+          var playAttempt = video.play();
+          if (playAttempt && typeof playAttempt.catch === 'function') {
+            playAttempt.catch(function () {
+              setIntroComplete();
+            });
+          }
+        }, { once: true });
+
+        video.addEventListener('ended', setIntroComplete, { once: true });
+        video.addEventListener('error', setIntroComplete, { once: true });
+        video.addEventListener('play', setPlaybackSpeed);
+
+        fallbackTimer = window.setTimeout(function () {
+          revealVideo();
+          if (video.paused) setIntroComplete();
+        }, 2500);
+
+        video.load();
+      }
+
+      window.addEventListener('scroll', updateBlackout, { passive: true });
+      window.addEventListener('resize', updateBlackout, { passive: true });
+    })();
+  </script>
 </body>
 </html>

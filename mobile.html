@@ -98,6 +98,33 @@
       -webkit-overflow-scrolling: touch;
     }
 
+    body::before {
+      position: fixed;
+      pointer-events: none;
+      opacity: 0;
+    }
+
+    body::before {
+      content: '';
+      inset: 0;
+      z-index: 10000;
+      background: #050505;
+      transform: scaleY(0);
+      transform-origin: bottom;
+      transition: transform 0.72s cubic-bezier(0.76, 0, 0.24, 1), opacity 0.2s ease;
+    }
+
+    body.page-exit::before {
+      opacity: 1;
+      transform: scaleY(1);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      body::before {
+        transition: none;
+      }
+    }
+
     /* ── Scroll progress ── */
     .scroll-progress {
       position: fixed;
@@ -338,7 +365,7 @@
 
     .footer-reveal .footer-logo {
       font-family: 'Playfair Display', Georgia, serif;
-      font-size: 1.2rem;
+      font-size: clamp(1.9rem, 8vw, 3rem);
       font-style: italic;
       font-weight: 400;
       letter-spacing: 0.02em;
@@ -347,11 +374,11 @@
 
     .footer-reveal .footer-tagline {
       font-family: 'Inter', sans-serif;
-      font-size: 0.7rem;
-      letter-spacing: 0.1em;
+      font-size: clamp(0.78rem, 3vw, 0.95rem);
+      letter-spacing: 0.13em;
       text-transform: uppercase;
-      opacity: 0.4;
-      margin-top: 0.4rem;
+      opacity: 0.58;
+      margin-top: 0.65rem;
     }
 
     .footer-reveal .footer-links {
@@ -363,8 +390,17 @@
     }
 
     .footer-offer-button {
-      margin: 1.4rem auto 0;
-      border: 1px solid rgba(255,255,255,0.72);
+      margin: 2rem auto 0;
+      padding: 1.1rem 1.6rem;
+      min-height: 58px;
+      width: min(100%, 320px);
+      color: #fff;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.44);
+      border-radius: 0;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 18px 60px rgba(0,0,0,0.32);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
     }
 
     .footer-social {
@@ -388,9 +424,9 @@
 
     .footer-copy {
       font-family: 'Inter', sans-serif;
-      font-size: 0.65rem;
-      letter-spacing: 0.08em;
-      opacity: 0.25;
+      font-size: 0.52rem;
+      letter-spacing: 0.06em;
+      opacity: 0.18;
     }
 
     /* ═══════════════════════════════════════════
@@ -697,7 +733,7 @@
         <div class="inner">
           <span class="footer-logo">LumiereMotionLabs</span>
           <p class="footer-tagline">Cinematic real estate visualization</p>
-          <a href="offer.html" class="cta-button footer-offer-button">View offer & proof</a>
+          <a href="offer.html" class="cta-button footer-offer-button" data-page-transition>View Available Services</a>
           <div class="footer-links">
             <a href="https://instagram.com/lumiere.motionlab" target="_blank" rel="noopener" class="footer-social">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
@@ -729,6 +765,28 @@
       var progressBar = document.getElementById('scrollProgress');
       var videoSections = document.querySelectorAll('[data-video-section]');
       var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+      document.querySelectorAll('[data-page-transition]').forEach(function (link) {
+        link.addEventListener('click', function (e) {
+          if (
+            e.defaultPrevented ||
+            e.metaKey ||
+            e.ctrlKey ||
+            e.shiftKey ||
+            e.altKey ||
+            link.target === '_blank' ||
+            window.matchMedia('(prefers-reduced-motion: reduce)').matches
+          ) {
+            return;
+          }
+
+          e.preventDefault();
+          document.body.classList.add('page-exit');
+          window.setTimeout(function () {
+            window.location.href = link.href;
+          }, 620);
+        });
+      });
 
       // Per-video interpolation state
       var videoCurrentTimes = new Map();
