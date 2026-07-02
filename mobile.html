@@ -341,6 +341,15 @@
       pointer-events: none;
     }
 
+    .cta-section {
+      margin-top: -1px;
+      padding-top: clamp(2.5rem, 5vw, 4rem);
+    }
+
+    .cta-section::before {
+      display: none;
+    }
+
     .conversion-inner {
       position: relative;
       z-index: 1;
@@ -928,7 +937,7 @@
   <!-- ╔══════════════════════════════════════════╗
        ║  CONVERSION — CTA                         ║
        ╚══════════════════════════════════════════╝ -->
-  <section class="conversion-section" aria-labelledby="audit-offer-heading">
+  <section class="conversion-section cta-section" aria-labelledby="audit-offer-heading">
     <div class="conversion-inner">
       <p class="eyebrow">Free listing visual audit</p>
       <h2 id="audit-offer-heading">Send us your listing. Get 3 visual fixes.</h2>
