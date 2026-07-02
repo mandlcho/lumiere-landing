@@ -1,50 +1,36 @@
-# Lumiere Landing## 
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-Static landing page for Lumiere, built as plain HTML/CSS/JavaScript and deployed directly from the repository root.
+## Getting Started
 
-## Project Structure
-
-- `index.html` - entry page.
-- `desktop.html` - desktop English landing page.
-- `mobile.html` - mobile English landing page.
-- `desktop-cn.html` - desktop Chinese landing page.
-- `mobile-cn.html` - mobile Chinese landing page.
-- `*.mp4` - landing page video assets.
-- `flyer/` - flyer HTML concepts, still images, generator script, and exported PDF.
-- `docs/` - supporting documentation.
-- `vercel.json` - Vercel config for static deployment with no build step.
-
-## Local Preview
-
-No package install is required. Open `index.html` directly in a browser, or serve the folder locally:
+First, run the development server:
 
 ```bash
-python -m http.server 3000
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-Then open:
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-```text
-http://localhost:3000
-```
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-## Development Notes
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-- Keep the site dependency-free unless a feature clearly needs a build step.
-- Update desktop and mobile variants together when changing shared content.
-- Update English and Chinese variants together when changing copy.
-- Keep large media files compressed enough for web delivery.
-- If routing changes, update `robots.txt`, `sitemap.xml`, and `vercel.json` as needed.
+## Learn More
 
-## Deployment
+To learn more about Next.js, take a look at the following resources:
 
-The project is configured for static Vercel deployment with no build step:
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-```json
-{
-  "cleanUrls": false,
-  "trailingSlash": false
-}
-```
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-Vercel should publish the repository root directly from the `main` branch.
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

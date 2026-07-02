@@ -335,301 +335,7 @@
       100% { left: 150%; }
     }
 
-
-    /* ── Conversion sections ── */
-    .conversion-section {
-      position: relative;
-      background: #020202;
-      padding: clamp(5rem, 9vw, 8rem) 2rem;
-      overflow: hidden;
-      isolation: isolate;
-    }
-
-    .conversion-section::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(circle at 50% 0%, rgba(255,255,255,0.085), transparent 34rem),
-        linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0) 36%, rgba(255,255,255,0.025));
-      pointer-events: none;
-      z-index: -1;
-    }
-
-    .conversion-section::after {
-      content: '';
-      position: absolute;
-      left: 8vw;
-      right: 8vw;
-      top: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
-      opacity: 0.7;
-    }
-
-    .cta-section {
-      margin-top: -1px;
-      padding-top: clamp(4rem, 7vw, 6rem);
-      padding-bottom: clamp(4.5rem, 7vw, 6.5rem);
-    }
-
-    .cta-section::before {
-      background:
-        radial-gradient(circle at 50% 15%, rgba(255,255,255,0.075), transparent 28rem),
-        linear-gradient(180deg, #000 0%, #030303 100%);
-    }
-
-    .conversion-inner {
-      position: relative;
-      z-index: 1;
-      max-width: 1040px;
-      margin: 0 auto;
-      text-align: center;
-    }
-
-    .cta-section .conversion-inner {
-      max-width: 920px;
-    }
-
-    .eyebrow {
-      font-family: 'Inter', sans-serif;
-      font-size: 0.66rem;
-      letter-spacing: 0.24em;
-      text-transform: uppercase;
-      opacity: 0.5;
-      margin-bottom: 1rem;
-    }
-
-    .conversion-section h2 {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: clamp(2.65rem, 5vw, 4.6rem);
-      font-weight: 400;
-      font-style: italic;
-      line-height: 1.04;
-      letter-spacing: 0.01em;
-      max-width: 860px;
-      margin: 0 auto 1.25rem;
-      text-wrap: balance;
-    }
-
-    .conversion-lede {
-      max-width: 690px;
-      margin: 0 auto;
-      font-size: clamp(0.92rem, 1.35vw, 1.04rem);
-      line-height: 1.85;
-      opacity: 0.68;
-      letter-spacing: 0.025em;
-      font-weight: 300;
-    }
-
-    .conversion-grid,
-    .proof-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
-      margin-top: 2.5rem;
-    }
-
-    .conversion-card,
-    .proof-card {
-      min-height: 170px;
-      padding: 1.45rem;
-      border: 1px solid rgba(255,255,255,0.10);
-      background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.035));
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      text-align: left;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
-    }
-
-    .proof-card {
-      background: rgba(255,255,255,0.045);
-    }
-
-    .conversion-card h3,
-    .proof-card h3 {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 1.3rem;
-      font-style: italic;
-      font-weight: 400;
-      margin-bottom: 0.65rem;
-    }
-
-    .conversion-card p,
-    .proof-card p {
-      font-size: 0.82rem;
-      line-height: 1.7;
-      opacity: 0.66;
-      letter-spacing: 0.02em;
-      font-weight: 300;
-    }
-
-    .proof-media {
-      position: relative;
-      height: 168px;
-      margin: -0.35rem -0.35rem 1rem;
-      border: 1px solid rgba(255,255,255,0.10);
-      background:
-        linear-gradient(135deg, rgba(255,255,255,0.11), rgba(255,255,255,0.025) 52%, rgba(255,255,255,0.075)),
-        radial-gradient(circle at 28% 28%, rgba(255,255,255,0.18), transparent 7.5rem),
-        radial-gradient(circle at 82% 18%, rgba(194,170,125,0.16), transparent 8rem),
-        linear-gradient(180deg, #161616 0%, #090909 100%);
-      overflow: hidden;
-    }
-
-    .proof-media::before,
-    .proof-media::after {
-      content: '';
-      position: absolute;
-      pointer-events: none;
-    }
-
-    .proof-media::before {
-      inset: 18% 12% auto;
-      height: 36%;
-      border-top: 1px solid rgba(255,255,255,0.10);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      transform: skewY(-4deg);
-      opacity: 0.55;
-    }
-
-    .proof-media::after {
-      top: 0;
-      bottom: 0;
-      left: 50%;
-      width: 1px;
-      background: linear-gradient(180deg, transparent, rgba(255,255,255,0.18), transparent);
-      opacity: 0.55;
-    }
-
-    .proof-media span {
-      position: absolute;
-      z-index: 1;
-      bottom: 0.85rem;
-      left: 0;
-      right: 0;
-      text-align: center;
-      font-size: 0.58rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      opacity: 0.46;
-    }
-
-    .proof-labels {
-      position: absolute;
-      z-index: 1;
-      top: 0.75rem;
-      left: 0.85rem;
-      right: 0.85rem;
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.54rem;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      opacity: 0.42;
-    }
-
-    .audit-steps {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 0.65rem;
-      margin: 2rem auto 0;
-      max-width: 920px;
-    }
-
-    .audit-step {
-      padding: 0.95rem 0.85rem;
-      border: 1px solid rgba(255,255,255,0.095);
-      background: rgba(255,255,255,0.035);
-      font-size: 0.68rem;
-      line-height: 1.55;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      opacity: 0.68;
-    }
-
-    .conversion-section .cta-button {
-      margin-top: 1.7rem;
-      border: 1px solid rgba(255,255,255,0.72);
-      box-shadow: 0 0 0 1px rgba(255,255,255,0.04), 0 16px 50px rgba(255,255,255,0.08);
-    }
-
-    .conversion-note {
-      margin-top: 1rem;
-      font-size: 0.68rem;
-      letter-spacing: 0.13em;
-      text-transform: uppercase;
-      opacity: 0.42;
-    }
-
-    .inline-offer,
-    .inline-proof {
-      margin-top: 2.2rem;
-      padding: 1.4rem;
-      border: 1px solid rgba(255,255,255,0.11);
-      background: rgba(0,0,0,0.38);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
-    }
-
-    .inline-offer h3,
-    .inline-proof > h3 {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: clamp(1.65rem, 3vw, 2.4rem);
-      font-weight: 400;
-      line-height: 1.1;
-      margin-bottom: 0.85rem;
-    }
-
-    .inline-offer .audit-steps,
-    .inline-proof .proof-grid {
-      margin-top: 1.25rem;
-    }
-
-    .inline-offer .cta-button {
-      margin-top: 1.25rem;
-    }
-
-    .primary-contact {
-      grid-column: 1 / -1;
-      justify-content: center;
-      padding: 0.9rem 1.25rem;
-      border: 1px solid rgba(255,255,255,0.25);
-      color: #000;
-      background: #fff;
-      opacity: 1;
-    }
-
-    .footer-section {
-      padding-top: 3.25rem;
-      padding-bottom: 4rem;
-      background: #000;
-    }
-
-    .footer-section::before {
-      display: none;
-    }
-
-    .footer-section .static-footer {
-      margin-top: 0;
-    }
-
-    @media (max-width: 900px) {
-      .conversion-grid,
-      .proof-grid,
-      .audit-steps {
-        grid-template-columns: 1fr;
-      }
-    }
-
     /* ── "No video" fallback ── */
-    .final-scroll-section {
-      margin-bottom: -1px;
-    }
-
-    .proof-section {
-      margin-top: -1px;
-      padding-top: clamp(4.5rem, 8vw, 7rem);
-    }
     .video-sticky::before {
       content: '';
       position: absolute;
@@ -641,10 +347,6 @@
     /* ── Footer reveal ── */
     .footer-reveal {
       z-index: 3;
-    }
-
-    .static-footer {
-      margin-top: 2.5rem;
     }
 
     .footer-reveal .footer-logo {
@@ -671,6 +373,11 @@
       justify-content: center;
       gap: 1rem 2rem;
       margin: 1.5rem 0;
+    }
+
+    .footer-offer-button {
+      margin: 1.4rem auto 0;
+      border: 1px solid rgba(255,255,255,0.72);
     }
 
     .footer-social {
@@ -799,20 +506,6 @@
               <p>Watch properties shift through golden hour, twilight, and everything in between.</p>
             </div>
           </div>
-
-          <div class="inline-offer" aria-label="Free listing visual audit offer">
-            <p class="eyebrow">Free listing visual audit</p>
-            <h3>Send us your listing. Get 3 visual fixes.</h3>
-            <p>We’ll identify the strongest visual hook, what makes it feel flat, and which staging or cinematic upgrade would make it look more premium online.</p>
-            <div class="audit-steps" aria-label="What the audit includes">
-              <div class="audit-step">3 specific visual improvements</div>
-              <div class="audit-step">Best hero angle</div>
-              <div class="audit-step">Staging recommendation</div>
-              <div class="audit-step">Best format for IG, WhatsApp or portals</div>
-            </div>
-            <a href="https://wa.me/6597777311?text=LISTING%20-%20I%27d%20like%20a%20free%20visual%20audit" target="_blank" rel="noopener" class="cta-button">WhatsApp LISTING</a>
-            <p class="conversion-note">Free first step. No pressure, no bloated proposal.</p>
-          </div>
         </div>
       </div>
     </div>
@@ -864,36 +557,6 @@
             From natural daylight to dramatic evening scenes, we capture the feeling
             that makes buyers fall in love with a property before they ever visit.
           </p>
-          <div class="inline-proof" aria-label="Proof of possibility examples">
-            <p class="eyebrow">Proof of possibility</p>
-            <h3>Before buyers visit, let them feel the finished space.</h3>
-            <div class="proof-grid">
-              <div class="proof-card">
-                <div class="proof-media" aria-label="Before and after placeholder for virtual staging">
-                  <div class="proof-labels"><b>Before</b><b>After</b></div>
-                  <span>Room staging</span>
-                </div>
-                <h3>Empty to buyer-ready</h3>
-                <p>Turn a bare condo bedroom into a warm, furnished master suite that feels ready to live in.</p>
-              </div>
-              <div class="proof-card">
-                <div class="proof-media" aria-label="Before and after placeholder for twilight transformation">
-                  <div class="proof-labels"><b>Day</b><b>Twilight</b></div>
-                  <span>Twilight mood</span>
-                </div>
-                <h3>Day to twilight</h3>
-                <p>Convert flat daytime exteriors into premium evening hero shots for stronger first impressions.</p>
-              </div>
-              <div class="proof-card">
-                <div class="proof-media" aria-label="Before and after placeholder for social teaser">
-                  <div class="proof-labels"><b>Photo</b><b>Teaser</b></div>
-                  <span>Social teaser</span>
-                </div>
-                <h3>Photo to social teaser</h3>
-                <p>Shape listing photos into cinematic visuals built for Reels, WhatsApp follow-ups, and portals.</p>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -902,7 +565,7 @@
   <!-- ╔══════════════════════════════════════════╗
        ║  SECTION 5 — CTA                          ║
        ╚══════════════════════════════════════════╝ -->
-  <div class="video-section final-scroll-section" data-video-section>
+  <div class="video-section" data-video-section>
     <div class="video-sticky">
       <video muted playsinline preload="auto" data-scroll-video>
         <source src="bridview.mp4" type="video/mp4">
@@ -910,23 +573,12 @@
       <div class="video-overlay"></div>
       <div class="video-text" data-phase="primary">
         <h2>Ready to Transform Your Listings?</h2>
-        <p>Send us your listings and we'll craft the cinematic visuals.</p>
       </div>
-    </div>
-  </div>
-
-
-
-
-  <!-- ╔══════════════════════════════════════════╗
-       ║  FOOTER                                  ║
-       ╚══════════════════════════════════════════╝ -->
-  <section class="conversion-section footer-section" aria-label="Footer">
-    <div class="conversion-inner">
-      <div class="footer-reveal static-footer">
+      <div class="video-content footer-reveal" data-phase="footer">
         <div class="inner">
           <span class="footer-logo">LumiereMotionLabs</span>
           <p class="footer-tagline">Cinematic real estate visualization</p>
+          <a href="offer.html" class="cta-button footer-offer-button">View offer & proof</a>
           <div class="footer-links">
             <a href="https://instagram.com/lumiere.motionlab" target="_blank" rel="noopener" class="footer-social">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
@@ -949,7 +601,7 @@
         </div>
       </div>
     </div>
-  </section>
+  </div>
 
   <!-- Custom cursor -->
   <div class="cursor-dot" id="cursorDot"></div>
