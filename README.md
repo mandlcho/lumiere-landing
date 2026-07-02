@@ -38,13 +38,12 @@ http://localhost:3000
 
 ## Deployment
 
-The project is configured for static Vercel deployment:
+The project is configured for static Vercel deployment with no build step:
 
 ```json
 {
-  "buildCommand": "",
-  "outputDirectory": ".",
-  "framework": null
+  "cleanUrls": false,
+  "trailingSlash": false
 }
 ```
 
