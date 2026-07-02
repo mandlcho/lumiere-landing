@@ -413,6 +413,67 @@
       letter-spacing: 0.02em;
     }
 
+
+    .proof-media {
+      position: relative;
+      height: 132px;
+      margin: -0.25rem -0.25rem 0.9rem;
+      border: 1px solid rgba(255,255,255,0.12);
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.025)),
+        radial-gradient(circle at 30% 25%, rgba(255,255,255,0.16), transparent 8rem),
+        #070707;
+      overflow: hidden;
+    }
+
+    .proof-media::before,
+    .proof-media::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 50%;
+      background: rgba(255,255,255,0.03);
+    }
+
+    .proof-media::before {
+      left: 0;
+      border-right: 1px solid rgba(255,255,255,0.14);
+    }
+
+    .proof-media::after {
+      right: 0;
+      background: rgba(255,255,255,0.08);
+    }
+
+    .proof-media span {
+      position: absolute;
+      z-index: 1;
+      bottom: 0.85rem;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      opacity: 0.55;
+    }
+
+    .proof-labels {
+      position: absolute;
+      z-index: 1;
+      top: 0.75rem;
+      left: 0.75rem;
+      right: 0.75rem;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.55rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      opacity: 0.48;
+    }
+
+
     .audit-step {
       padding: 0.95rem;
       border: 1px solid rgba(255,255,255,0.10);
@@ -841,14 +902,26 @@
       </p>
       <div class="proof-grid">
         <div class="proof-card">
+          <div class="proof-media" aria-label="Before and after placeholder for virtual staging">
+            <div class="proof-labels"><b>Before</b><b>After</b></div>
+            <span>Replace with room staging visual</span>
+          </div>
           <h3>Empty to buyer-ready</h3>
           <p>Turn a bare condo bedroom into a warm, furnished master suite that feels ready to live in.</p>
         </div>
         <div class="proof-card">
+          <div class="proof-media" aria-label="Before and after placeholder for twilight transformation">
+            <div class="proof-labels"><b>Day</b><b>Twilight</b></div>
+            <span>Replace with day-to-night visual</span>
+          </div>
           <h3>Day to twilight</h3>
           <p>Convert flat daytime exteriors into premium evening hero shots for stronger first impressions.</p>
         </div>
         <div class="proof-card">
+          <div class="proof-media" aria-label="Before and after placeholder for social teaser">
+            <div class="proof-labels"><b>Photo</b><b>Teaser</b></div>
+            <span>Replace with social-ready visual</span>
+          </div>
           <h3>Photo to social teaser</h3>
           <p>Shape ordinary listing photos into cinematic visuals built for Reels, WhatsApp follow-ups, and property portals.</p>
         </div>
