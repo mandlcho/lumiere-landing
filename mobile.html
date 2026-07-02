@@ -326,9 +326,10 @@
     /* ── Conversion sections ── */
     .conversion-section {
       position: relative;
-      background: #000;
-      padding: 4rem 1.25rem;
+      background: #020202;
+      padding: 4.75rem 1.25rem;
       overflow: hidden;
+      isolation: isolate;
     }
 
     .conversion-section::before {
@@ -336,18 +337,33 @@
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(circle at 20% 10%, rgba(255,255,255,0.10), transparent 18rem),
-        radial-gradient(circle at 80% 80%, rgba(255,255,255,0.06), transparent 16rem);
+        radial-gradient(circle at 50% 0%, rgba(255,255,255,0.08), transparent 22rem),
+        linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0) 36%, rgba(255,255,255,0.025));
       pointer-events: none;
+      z-index: -1;
+    }
+
+    .conversion-section::after {
+      content: '';
+      position: absolute;
+      left: 10vw;
+      right: 10vw;
+      top: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.16), transparent);
+      opacity: 0.65;
     }
 
     .cta-section {
       margin-top: -1px;
-      padding-top: clamp(2.5rem, 5vw, 4rem);
+      padding-top: 4rem;
+      padding-bottom: 4.25rem;
     }
 
     .cta-section::before {
-      display: none;
+      background:
+        radial-gradient(circle at 50% 12%, rgba(255,255,255,0.075), transparent 20rem),
+        linear-gradient(180deg, #000 0%, #030303 100%);
     }
 
     .conversion-inner {
@@ -360,29 +376,31 @@
 
     .eyebrow {
       font-family: 'Inter', sans-serif;
-      font-size: 0.62rem;
-      letter-spacing: 0.2em;
+      font-size: 0.6rem;
+      letter-spacing: 0.22em;
       text-transform: uppercase;
-      opacity: 0.55;
-      margin-bottom: 0.85rem;
+      opacity: 0.5;
+      margin-bottom: 0.9rem;
     }
 
     .conversion-section h2 {
       font-family: 'Playfair Display', Georgia, serif;
-      font-size: clamp(2rem, 12vw, 3.75rem);
+      font-size: clamp(2.15rem, 11vw, 3.55rem);
       font-weight: 400;
       font-style: italic;
       line-height: 1.05;
       letter-spacing: 0.01em;
       margin: 0 auto 1rem;
+      text-wrap: balance;
     }
 
     .conversion-lede {
       margin: 0 auto;
-      font-size: 0.95rem;
-      line-height: 1.75;
-      opacity: 0.78;
+      font-size: 0.92rem;
+      line-height: 1.78;
+      opacity: 0.68;
       letter-spacing: 0.02em;
+      font-weight: 300;
     }
 
     .conversion-grid,
@@ -396,18 +414,23 @@
 
     .conversion-card,
     .proof-card {
-      padding: 1.35rem 1.2rem;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.06);
+      padding: 1.25rem 1.15rem;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.035));
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       text-align: left;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+
+    .proof-card {
+      background: rgba(255,255,255,0.045);
     }
 
     .conversion-card h3,
     .proof-card h3 {
       font-family: 'Playfair Display', Georgia, serif;
-      font-size: 1.25rem;
+      font-size: 1.22rem;
       font-style: italic;
       font-weight: 400;
       margin-bottom: 0.55rem;
@@ -415,22 +438,23 @@
 
     .conversion-card p,
     .proof-card p {
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       line-height: 1.65;
-      opacity: 0.72;
+      opacity: 0.66;
       letter-spacing: 0.02em;
+      font-weight: 300;
     }
-
 
     .proof-media {
       position: relative;
-      height: 132px;
-      margin: -0.25rem -0.25rem 0.9rem;
-      border: 1px solid rgba(255,255,255,0.12);
+      height: 140px;
+      margin: -0.2rem -0.2rem 0.9rem;
+      border: 1px solid rgba(255,255,255,0.10);
       background:
-        linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.025)),
-        radial-gradient(circle at 30% 25%, rgba(255,255,255,0.16), transparent 8rem),
-        #070707;
+        linear-gradient(135deg, rgba(255,255,255,0.11), rgba(255,255,255,0.025) 52%, rgba(255,255,255,0.075)),
+        radial-gradient(circle at 28% 28%, rgba(255,255,255,0.18), transparent 7rem),
+        radial-gradient(circle at 82% 18%, rgba(194,170,125,0.16), transparent 7rem),
+        linear-gradient(180deg, #161616 0%, #090909 100%);
       overflow: hidden;
     }
 
@@ -438,67 +462,77 @@
     .proof-media::after {
       content: '';
       position: absolute;
-      top: 0;
-      bottom: 0;
-      width: 50%;
-      background: rgba(255,255,255,0.03);
+      pointer-events: none;
     }
 
     .proof-media::before {
-      left: 0;
-      border-right: 1px solid rgba(255,255,255,0.14);
+      inset: 18% 12% auto;
+      height: 36%;
+      border-top: 1px solid rgba(255,255,255,0.10);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      transform: skewY(-4deg);
+      opacity: 0.55;
     }
 
     .proof-media::after {
-      right: 0;
-      background: rgba(255,255,255,0.08);
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 1px;
+      background: linear-gradient(180deg, transparent, rgba(255,255,255,0.18), transparent);
+      opacity: 0.55;
     }
 
     .proof-media span {
       position: absolute;
       z-index: 1;
-      bottom: 0.85rem;
+      bottom: 0.8rem;
       left: 0;
       right: 0;
       text-align: center;
-      font-size: 0.6rem;
-      letter-spacing: 0.18em;
+      font-size: 0.56rem;
+      letter-spacing: 0.17em;
       text-transform: uppercase;
-      opacity: 0.55;
+      opacity: 0.46;
     }
 
     .proof-labels {
       position: absolute;
       z-index: 1;
-      top: 0.75rem;
+      top: 0.7rem;
       left: 0.75rem;
       right: 0.75rem;
       display: flex;
       justify-content: space-between;
-      font-size: 0.55rem;
-      letter-spacing: 0.16em;
+      font-size: 0.52rem;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
-      opacity: 0.48;
+      opacity: 0.42;
     }
 
-
     .audit-step {
-      padding: 0.95rem;
-      border: 1px solid rgba(255,255,255,0.10);
-      background: rgba(0,0,0,0.35);
-      font-size: 0.68rem;
+      padding: 0.9rem;
+      border: 1px solid rgba(255,255,255,0.095);
+      background: rgba(255,255,255,0.035);
+      font-size: 0.66rem;
       line-height: 1.55;
       letter-spacing: 0.11em;
       text-transform: uppercase;
-      opacity: 0.78;
+      opacity: 0.68;
+    }
+
+    .conversion-section .cta-button {
+      margin-top: 1.45rem;
+      border: 1px solid rgba(255,255,255,0.72);
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.04), 0 14px 42px rgba(255,255,255,0.08);
     }
 
     .conversion-note {
       margin-top: 0.9rem;
-      font-size: 0.68rem;
+      font-size: 0.66rem;
       letter-spacing: 0.11em;
       text-transform: uppercase;
-      opacity: 0.5;
+      opacity: 0.42;
     }
 
     .primary-contact {
@@ -509,6 +543,20 @@
       color: #000;
       background: #fff;
       opacity: 1;
+    }
+
+    .footer-section {
+      padding-top: 3rem;
+      padding-bottom: 3.75rem;
+      background: #000;
+    }
+
+    .footer-section::before {
+      display: none;
+    }
+
+    .footer-section .static-footer {
+      margin-top: 0;
     }
 
     /* ── "No video" fallback ── */
@@ -912,7 +960,7 @@
         <div class="proof-card">
           <div class="proof-media" aria-label="Before and after placeholder for virtual staging">
             <div class="proof-labels"><b>Before</b><b>After</b></div>
-            <span>Replace with room staging visual</span>
+            <span>Room staging</span>
           </div>
           <h3>Empty to buyer-ready</h3>
           <p>Turn a bare condo bedroom into a warm, furnished master suite that feels ready to live in.</p>
@@ -920,7 +968,7 @@
         <div class="proof-card">
           <div class="proof-media" aria-label="Before and after placeholder for twilight transformation">
             <div class="proof-labels"><b>Day</b><b>Twilight</b></div>
-            <span>Replace with day-to-night visual</span>
+            <span>Twilight mood</span>
           </div>
           <h3>Day to twilight</h3>
           <p>Convert flat daytime exteriors into premium evening hero shots for stronger first impressions.</p>
@@ -928,7 +976,7 @@
         <div class="proof-card">
           <div class="proof-media" aria-label="Before and after placeholder for social teaser">
             <div class="proof-labels"><b>Photo</b><b>Teaser</b></div>
-            <span>Replace with social-ready visual</span>
+            <span>Social teaser</span>
           </div>
           <h3>Photo to social teaser</h3>
           <p>Shape ordinary listing photos into cinematic visuals built for Reels, WhatsApp follow-ups, and property portals.</p>
