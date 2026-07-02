@@ -837,7 +837,7 @@
         video.addEventListener('play', setPlaybackSpeed);
         video.addEventListener('timeupdate', function () {
           if (!video.duration) return;
-          if ((video.duration - video.currentTime) / video.playbackRate <= 5) {
+          if ((video.duration - video.currentTime) / video.playbackRate <= 3) {
             revealCopy();
           }
         });
