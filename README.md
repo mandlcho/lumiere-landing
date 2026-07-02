@@ -47,4 +47,4 @@ The project is configured for static Vercel deployment with no build step:
 }
 ```
 
-Vercel should publish the repository root directly.
+Vercel should publish the repository root directly from the `main` branch.
