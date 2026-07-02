@@ -1,4 +1,4 @@
-# Lumiere Landing
+# Lumiere Landing## 
 
 Static landing page for Lumiere, built as plain HTML/CSS/JavaScript and deployed directly from the repository root.
 
