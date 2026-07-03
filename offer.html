@@ -594,6 +594,67 @@
       justify-content: center;
       width: min(360px, 100%);
     }
+    .recap-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      width: min(760px, 100%);
+      margin: 2rem auto 0;
+      background: rgba(247,243,237,0.13);
+      border: 1px solid rgba(247,243,237,0.13);
+      text-align: left;
+    }
+    .recap-item {
+      padding: 1rem;
+      background: rgba(5,5,5,0.68);
+    }
+    .recap-item strong {
+      display: block;
+      margin-bottom: 0.35rem;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.2rem;
+      font-style: italic;
+      font-weight: 400;
+    }
+    .recap-item span {
+      color: rgba(247,243,237,0.62);
+      font-size: 0.78rem;
+      line-height: 1.45;
+    }
+    .sticky-audit-cta {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 20;
+      display: none;
+      padding: 0.75rem 0.9rem max(0.75rem, env(safe-area-inset-bottom));
+      background: rgba(5,5,5,0.86);
+      border-top: 1px solid rgba(247,243,237,0.13);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    .sticky-audit-cta a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      min-height: 54px;
+      padding: 0 1rem;
+      color: #070707;
+      background: #f8f3e8;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 0.68rem;
+      font-weight: 500;
+    }
+    .sticky-audit-cta span {
+      display: block;
+      color: rgba(7,7,7,0.58);
+      font-size: 0.63rem;
+      letter-spacing: 0.08em;
+    }
     .final p {
       max-width: 620px;
       margin-top: 1rem;
@@ -620,11 +681,13 @@
       }
     }
     @media (max-width: 680px) {
+      body { padding-bottom: 82px; }
       .topbar {
         padding-left: 1rem;
         padding-right: 1rem;
       }
       .nav-anchor { display: none; }
+      .sticky-audit-cta { display: block; }
       .intro-sequence {
         height: 138svh;
       }
@@ -642,7 +705,8 @@
       .transformation-grid,
       .steps,
       .faq-grid,
-      .send-kit {
+      .send-kit,
+      .recap-strip {
         grid-template-columns: 1fr;
       }
       .proof-cta {
@@ -921,14 +985,20 @@
       </div>
     </section>
 
-    <section class="final" aria-labelledby="final-heading">
+    <section class="final" id="final-cta" aria-labelledby="final-heading">
       <div class="shell">
         <p class="eyebrow">One obvious CTA</p>
         <h2 id="final-heading">Send the listing. We will tell you what to fix first.</h2>
         <p>Drop the link on WhatsApp. We will review the visuals and reply with the first three changes we would make.</p>
+        <div class="recap-strip" aria-label="Audit recap">
+          <div class="recap-item"><strong>1. Send one listing</strong><span>Link, photos, floor plan, or quick note.</span></div>
+          <div class="recap-item"><strong>2. Get 3 fixes</strong><span>Hero angle, visual problem, and upgrade path.</span></div>
+          <div class="recap-item"><strong>3. Decide next move</strong><span>Use the advice yourself or ask us to produce.</span></div>
+        </div>
         <div class="cta-row">
           <a class="cta-button" href="https://wa.me/6597777311?text=LISTING%20-%20I%27d%20like%20a%20free%20visual%20audit" target="_blank" rel="noopener">WhatsApp LISTING</a>
         </div>
+        <p class="cta-note">Free first audit. No obligation. Typical reply within 24h when materials are usable.</p>
       </div>
     </section>
   </main>
@@ -936,6 +1006,13 @@
   <footer>
     <div class="shell">LumiereMotionLabs - Cinematic real estate visualization</div>
   </footer>
+
+  <div class="sticky-audit-cta" aria-label="Sticky free listing audit call to action">
+    <a href="https://wa.me/6597777311?text=LISTING%20-%20I%27d%20like%20a%20free%20visual%20audit" target="_blank" rel="noopener">
+      <strong>Free listing audit</strong>
+      <span>WhatsApp listing →</span>
+    </a>
+  </div>
 
   <script>
     (function () {
