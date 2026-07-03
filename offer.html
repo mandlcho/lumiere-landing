@@ -57,6 +57,7 @@
       text-shadow: 0 1px 18px rgba(0,0,0,0.55);
     }
     .back-link,
+    .nav-anchor,
     .eyebrow,
     .mini-label,
     .step-number,
@@ -69,6 +70,20 @@
       text-decoration: none;
       color: rgba(247,243,237,0.72);
       white-space: nowrap;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: clamp(0.8rem, 2vw, 1.35rem);
+    }
+    .nav-anchor {
+      text-decoration: none;
+      color: rgba(247,243,237,0.58);
+      white-space: nowrap;
+    }
+    .nav-anchor:hover,
+    .back-link:hover {
+      color: #f7f3ed;
     }
     .intro-sequence {
       position: relative;
@@ -271,6 +286,12 @@
       margin-top: 1rem;
       color: rgba(247,243,237,0.56);
       font-size: 0.85rem;
+      line-height: 1.55;
+    }
+    .cta-note {
+      margin-top: 0.8rem;
+      color: rgba(247,243,237,0.58);
+      font-size: 0.78rem;
       line-height: 1.55;
     }
     .stats {
@@ -562,6 +583,7 @@
         padding-left: 1rem;
         padding-right: 1rem;
       }
+      .nav-anchor { display: none; }
       .intro-sequence {
         height: 138svh;
       }
@@ -612,7 +634,12 @@
   <main class="page">
     <nav class="topbar" aria-label="Page navigation">
       <a class="brand" href="index.html">LumiereMotionLabs</a>
-      <a class="back-link" href="index.html">Back to experience</a>
+      <div class="nav-links">
+        <a class="nav-anchor" href="#proof">Proof</a>
+        <a class="nav-anchor" href="#process">How it works</a>
+        <a class="nav-anchor" href="#final-cta">WhatsApp</a>
+        <a class="back-link" href="index.html">Back to experience</a>
+      </div>
     </nav>
 
     <section class="intro-sequence" data-offer-intro aria-labelledby="offer-heading">
@@ -630,6 +657,7 @@
             <a class="cta-button" href="https://wa.me/6597777311?text=LISTING%20-%20I%27d%20like%20a%20free%20visual%20audit" target="_blank" rel="noopener">WhatsApp LISTING</a>
             <a class="secondary-link" href="#proof">See proof of work</a>
           </div>
+          <p class="cta-note">Free first audit. No obligation. Typical reply within 24h when materials are usable.</p>
           <p class="note">No pitch deck. No generic checklist. Just the first three fixes we would make.</p>
         </div>
       </div>
@@ -771,7 +799,7 @@
       </div>
     </section>
 
-    <section class="band alt" aria-labelledby="process-heading">
+    <section class="band alt" id="process" aria-labelledby="process-heading">
       <div class="shell">
         <div class="section-head">
           <div>
