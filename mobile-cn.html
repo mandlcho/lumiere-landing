@@ -752,6 +752,16 @@
         videoReady.set(video, false);
         videoLoading.set(video, false);
 
+        // Metadata can arrive after the animation loop has gone idle.
+        function refreshVideoState() {
+          if (!sectionLayouts.length) return;
+          computeScrollState(window.scrollY || window.pageYOffset);
+          startAnimation();
+        }
+        video.addEventListener('loadedmetadata', refreshVideoState);
+        video.addEventListener('loadeddata', refreshVideoState);
+        video.addEventListener('seeked', startAnimation);
+
         // Mark ready once enough data is buffered
         video.addEventListener('canplaythrough', function () {
           videoReady.set(video, true);
@@ -779,15 +789,21 @@
       }
 
       // Prime a video for iOS — play/pause trick to unlock hardware decoder
+      var primedVideos = new WeakSet();
+      var primingVideos = new WeakSet();
       function primeVideo(video) {
+        if (primedVideos.has(video) || primingVideos.has(video)) return;
+        primingVideos.add(video);
         var p = video.play();
         if (p !== undefined) {
           p.then(function () {
             video.pause();
-            video.currentTime = 0;
+            primingVideos.delete(video);
+            primedVideos.add(video);
+            startAnimation();
           }).catch(function () {
-            // Silently fail — will retry via loadVideo on next scroll
-            videoLoading.set(video, false);
+            primingVideos.delete(video);
+            // Keep the existing download; retry playback on a user gesture.
           });
         }
       }
@@ -801,7 +817,6 @@
       // On first interaction, prime all videos for iOS playback unlock
       var hasPrimed = false;
       function primeAllVideos() {
-        if (hasPrimed) return;
         hasPrimed = true;
         videoSections.forEach(function (section) {
           var video = section.querySelector('[data-scroll-video]');
@@ -810,9 +825,9 @@
         });
       }
 
-      document.addEventListener('touchstart', primeAllVideos, { once: true, passive: true });
+      document.addEventListener('touchstart', primeAllVideos, { passive: true });
       document.addEventListener('scroll', primeAllVideos, { once: true, passive: true });
-      document.addEventListener('click', primeAllVideos, { once: true, passive: true });
+      document.addEventListener('click', primeAllVideos, { passive: true });
 
       // Progressive loading — load videos as their sections approach viewport
       function loadNearbyVideos(scrollTop) {
@@ -884,7 +899,7 @@
 
           // Video playback
           var videoProgress = Math.min(progress * 1.2, 1);
-          targetTimes.set(video, videoProgress * video.duration);
+          targetTimes.set(video, Math.min(videoProgress * video.duration, Math.max(0, video.duration - 0.05)));
 
           // ── Phase 1: Primary text (heading) ──
           // Hero: visible immediately, fades out 28-38%
@@ -990,7 +1005,7 @@
           else stillMoving = true;
 
           var seekThreshold = isMobile ? 0.04 : 0.016;
-          if (Math.abs(video.currentTime - next) > seekThreshold) {
+          if (video.readyState >= 2 && !video.seeking && Math.abs(video.currentTime - next) > seekThreshold) {
             video.currentTime = next;
           }
           videoCurrentTimes.set(video, next);
@@ -1082,7 +1097,7 @@
       }, { passive: true });
 
       // On load — show hero text immediately
-      window.addEventListener('load', function () {
+      document.addEventListener('DOMContentLoaded', function () {
         lastScrollY = window.scrollY || window.pageYOffset;
         cacheSectionLayouts();
         if (sectionLayouts[0] && sectionLayouts[0].primaryText) {

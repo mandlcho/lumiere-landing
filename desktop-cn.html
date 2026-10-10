@@ -677,6 +677,16 @@
         videoReady.set(video, false);
         videoLoading.set(video, false);
 
+        // Metadata can arrive after the animation loop has gone idle.
+        function refreshVideoState() {
+          if (!sectionLayouts.length) return;
+          computeScrollState(window.scrollY || window.pageYOffset);
+          startAnimation();
+        }
+        video.addEventListener('loadedmetadata', refreshVideoState);
+        video.addEventListener('loadeddata', refreshVideoState);
+        video.addEventListener('seeked', startAnimation);
+
         video.addEventListener('canplaythrough', function () {
           videoReady.set(video, true);
           videoLoading.set(video, false);
@@ -789,7 +799,7 @@
 
           // Video playback
           var videoProgress = Math.min(progress * 1.2, 1);
-          targetTimes.set(video, videoProgress * video.duration);
+          targetTimes.set(video, Math.min(videoProgress * video.duration, Math.max(0, video.duration - 0.05)));
 
           // ── Phase 1: Primary text ──
           // Wider windows than mobile (+2% each side)
@@ -904,7 +914,7 @@
           if (Math.abs(next - target) < 0.001) next = target;
           else stillMoving = true;
 
-          if (Math.abs(video.currentTime - next) > 0.016) {
+          if (video.readyState >= 2 && !video.seeking && Math.abs(video.currentTime - next) > 0.016) {
             video.currentTime = next;
           }
           videoCurrentTimes.set(video, next);
@@ -1027,7 +1037,7 @@
       }
 
       // On load
-      window.addEventListener('load', function () {
+      document.addEventListener('DOMContentLoaded', function () {
         lastScrollY = window.scrollY || window.pageYOffset;
         cacheSectionLayouts();
         if (sectionLayouts[0] && sectionLayouts[0].primaryText) {
