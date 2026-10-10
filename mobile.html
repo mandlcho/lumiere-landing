@@ -624,7 +624,7 @@
        ╚══════════════════════════════════════════╝ -->
   <div class="video-section" data-video-section>
     <div class="video-sticky">
-      <video muted playsinline webkit-playsinline preload="auto" data-scroll-video>
+      <video muted playsinline webkit-playsinline preload="metadata" poster="flyer/still-hero.jpg" data-scroll-video>
         <source src="lighttopss.mp4" type="video/mp4">
       </video>
       <div class="video-overlay"></div>
@@ -651,7 +651,7 @@
        ╚══════════════════════════════════════════╝ -->
   <div class="video-section" data-video-section>
     <div class="video-sticky">
-      <video muted playsinline webkit-playsinline preload="auto" data-scroll-video>
+      <video muted playsinline webkit-playsinline preload="metadata" poster="flyer/still-staging.jpg" data-scroll-video>
         <source src="staging.mp4" type="video/mp4">
       </video>
       <div class="video-overlay"></div>
@@ -686,7 +686,7 @@
        ╚══════════════════════════════════════════╝ -->
   <div class="video-section" data-video-section>
     <div class="video-sticky">
-      <video muted playsinline webkit-playsinline preload="auto" data-scroll-video>
+      <video muted playsinline webkit-playsinline preload="metadata" poster="flyer/still-office.jpg" data-scroll-video>
         <source src="transform_office.mp4" type="video/mp4">
       </video>
       <div class="video-overlay"></div>
@@ -712,7 +712,7 @@
        ╚══════════════════════════════════════════╝ -->
   <div class="video-section" data-video-section>
     <div class="video-sticky">
-      <video muted playsinline webkit-playsinline preload="auto" data-scroll-video>
+      <video muted playsinline webkit-playsinline preload="metadata" poster="flyer/still-lights.jpg" data-scroll-video>
         <source src="lights.mp4" type="video/mp4">
       </video>
       <div class="video-overlay"></div>
@@ -737,7 +737,7 @@
        ╚══════════════════════════════════════════╝ -->
   <div class="video-section" data-video-section>
     <div class="video-sticky">
-      <video muted playsinline webkit-playsinline preload="auto" data-scroll-video>
+      <video muted playsinline webkit-playsinline preload="metadata" poster="flyer/still-bridge.jpg" data-scroll-video>
         <source src="bridview.mp4" type="video/mp4">
       </video>
       <div class="video-overlay"></div>
@@ -832,6 +832,9 @@
       // Pause all videos
       videoSections.forEach(function (section) {
         var video = section.querySelector('[data-scroll-video]');
+        video.muted = true;
+        video.defaultMuted = true;
+        video.playsInline = true;
         video.pause();
         videoCurrentTimes.set(video, 0);
         videoReady.set(video, false);
@@ -843,7 +846,10 @@
           computeScrollState(window.scrollY || window.pageYOffset);
           startAnimation();
         }
-        video.addEventListener('loadedmetadata', refreshVideoState);
+        video.addEventListener('loadedmetadata', function () {
+          refreshVideoState();
+          primeVideo(video);
+        });
         video.addEventListener('loadeddata', refreshVideoState);
         video.addEventListener('seeked', startAnimation);
 
@@ -882,7 +888,15 @@
         var p = video.play();
         if (p !== undefined) {
           p.then(function () {
-            video.pause();
+            // Wait for a decoded frame before pausing the mobile decoder.
+            if (video.requestVideoFrameCallback) {
+              video.requestVideoFrameCallback(function () {
+                video.pause();
+                startAnimation();
+              });
+            } else {
+              video.pause();
+            }
             primingVideos.delete(video);
             primedVideos.add(video);
             startAnimation();
@@ -1090,7 +1104,7 @@
           else stillMoving = true;
 
           var seekThreshold = isMobile ? 0.04 : 0.016;
-          if (video.readyState >= 2 && !video.seeking && Math.abs(video.currentTime - next) > seekThreshold) {
+          if (video.readyState >= 1 && !video.seeking && Math.abs(video.currentTime - next) > seekThreshold) {
             video.currentTime = next;
           }
           videoCurrentTimes.set(video, next);
